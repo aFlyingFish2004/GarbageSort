@@ -14,7 +14,7 @@
 # 技术路线
 使用Python语言编程，对于图片分类，采用opencv + torchvision的图片处理技术，使用pytorch进行深度学习模型的训练。目前计划使用的模型是 ResNet50，后续也会考虑准确率等因素加入其他模型。算法方面，采用交叉熵损失函数，优化器选择 Adam，并采用 StepLR 进行学习率衰减。架构方面，采用Flask-Django作为前后端接口进行前后端分离设计，后端以python为主，前端主要采用vue框架。在用户数据方面，采用MySQL作为数据库进行数据的存储与处理。
 # 参考代码
-    目前在github上能找到的垃圾分类模型很少，而且大多已经过时难以使用。但是关于垃圾分类的数据集能找到很多。
+目前在github上能找到的垃圾分类模型很少，而且大多已经过时难以使用。但是关于垃圾分类的数据集能找到很多。
 数据集：
 https://aistudio.baidu.com/aistudio/datasetdetail/30982
 https://github.com/GuoHuiTian/GarbageSortingPictureDataSet.git
