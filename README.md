@@ -16,10 +16,10 @@
 # 参考代码
 目前在github上能找到的垃圾分类模型很少，而且大多已经过时难以使用。但是关于垃圾分类的数据集能找到很多。
 数据集：
-https://aistudio.baidu.com/aistudio/datasetdetail/30982
-https://github.com/GuoHuiTian/GarbageSortingPictureDataSet.git
+  https://aistudio.baidu.com/aistudio/datasetdetail/30982
+  https://github.com/GuoHuiTian/GarbageSortingPictureDataSet.git
 参考代码：
-https://github.com/Jack-Cherish/Deep-Learning/tree/master/Pytorch-Seg/lesson-4
+  https://github.com/Jack-Cherish/Deep-Learning/tree/master/Pytorch-Seg/lesson-4
 # 提升及修改：
 （1）升级代码架构，使代码适合现在的开发环境，能够正常运行。
 （2）修改模型的功能，使之分类结果与中国现行标准相符合。
