@@ -19,7 +19,8 @@
 [垃圾分类数据集at飞桨at](https://aistudio.baidu.com/aistudio/datasetdetail/30982)
 
 [垃圾分类数据集at Github](https://github.com/GuoHuiTian/GarbageSortingPictureDataSet.git)
-参考代码：  
+
+参考代码:
 [https://github.com/Jack-Cherish/Deep-Learning/tree/master/Pytorch-Seg/lesson-4](https://github.com/Jack-Cherish/Deep-Learning/tree/master/Pytorch-Seg/lesson-4)
 # 提升及修改：
 （1）升级代码架构，使代码适合现在的开发环境，能够正常运行。  
