@@ -1,0 +1,5 @@
+__pycache__/
+runs/
+checkpoint_resnet50.pth.tar
+model_best_checkpoint_resnet50.pth.tar
+垃圾图片库/
