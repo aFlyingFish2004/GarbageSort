@@ -1,4 +1,6 @@
+﻿# -*- coding:utf-8 -*-
 # train.py
+
 from dataset import Garbage_Loader
 from torch.utils.data import DataLoader
 from torchvision import models
