@@ -1,6 +1,4 @@
-﻿# -*- coding:utf-8 -*-
-# train.py
-
+﻿# train.py
 from dataset import Garbage_Loader
 from torch.utils.data import DataLoader
 from torchvision import models
@@ -11,12 +9,6 @@ import time
 import os
 import shutil
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
-"""
-    Author : Jack Cui
-    Wechat : https://mp.weixin.qq.com/s/OCWwRVDFNslIuKyiCVUoTA
-"""
-
 from tensorboardX import SummaryWriter
 
 def accuracy(output, target, topk=(1,)):
