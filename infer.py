@@ -8,6 +8,8 @@ import torch
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
+
 #%matplotlib inline
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
