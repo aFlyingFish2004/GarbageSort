@@ -7,6 +7,7 @@ import Recognize_result from '../pages/recognize_result/recognize_result.vue';
 import Account from '../pages/account/account.vue';
 import My from '../pages/my/my.vue';
 import Sign_up from '../pages/sign_up/sign_up.vue';
+import My_model from '../pages/my_model/my_model.vue';
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
     name: 'sign_up',
     component: Sign_up,
   },
+  {
+    path:'/my_model',
+    name:'my_model',
+    component:My_model,
+  }
 ];
 
 const router = createRouter({
