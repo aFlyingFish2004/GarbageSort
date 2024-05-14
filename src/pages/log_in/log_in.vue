@@ -1,12 +1,15 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
 
   const props = defineProps({});
 
   const data = reactive({});
 
   const router = useRouter();
+
+  const email = ref('');
+  const password = ref('')
 
   function onClick() {
     router.push({ name: 'home' });
@@ -15,6 +18,7 @@
   function onClick_1() {
     router.push({ name: 'sign_up' });
   }
+  
 </script>
 
 <template>
@@ -26,16 +30,16 @@
     <div class="flex-col self-stretch group">
       <span class="self-start font">邮箱</span>
       <div class="mt-12 flex-col justify-start items-start self-stretch text-wrapper">
-        <span class="font_2 text_3 text_4">ex: jon.smith@email.com</span>
+        <input class="font_2 text_3 text_4" type="text" v-model="email" placeholder="ex: jon.smith@email.com" />
       </div>
       <span class="mt-12 self-start font">密码</span>
-      <div class="mt-12 flex-col justify-start items-start self-stretch text-wrapper_2">
-        <span class="font_2 text_3 text_6">*********</span>
+      <div class="mt-12 flex-col justify-start items-start self-stretch text-wrapper">
+        <input class="font_2 text_3 text_4" type="password" v-model="password" placeholder="Password" />
       </div>
     </div>
-    <div class="flex-col justify-start items-center self-stretch login_button" @click="onClick">
+    <button class="flex-col justify-start items-center self-stretch login_button" @click="onClick">
       <span class="text_7">登录</span>
-    </div>
+    </button>
     <span class="self-center font_2 text_8">或通过以下方式</span>
     <div class="flex-row equal-division">
       <img class="image_1" src="../../images/e2afafdca77b5918b74fa05b6e854937.png" />
@@ -50,6 +54,21 @@
 </template>
 
 <style scoped lang="css">
+ input {
+  border: none;
+  background: none;
+  padding: 0;
+  width: 60vw;
+}
+input:focus {
+  outline: none;
+}
+input:focus::placeholder {
+  color: transparent;
+}
+button {
+  border: none; 
+}
   .ml-9 {
     margin-left: 2.29vw;
   }

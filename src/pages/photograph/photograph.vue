@@ -8,6 +8,14 @@
 
   const router = useRouter();
 
+  //获取视频流
+  // const mediaStreamTrack = ref({});
+  // const videoStream = ref(''); // 视频stream
+  // const imgSrc = ref(''); // 拍照图片
+  // let canvas = null;
+  // let context = null;
+  // const video = ref(null)
+
   function onClick() {
     router.push({ name: 'home' });
   }

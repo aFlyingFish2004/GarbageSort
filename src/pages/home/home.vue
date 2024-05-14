@@ -1,12 +1,14 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
 
   const props = defineProps({});
 
   const data = reactive({});
 
   const router = useRouter();
+
+  const search = ref('')
 
   function onClick() {
     router.push({ name: 'photograph' });
@@ -25,8 +27,8 @@
   <div class="flex-col justify-start page">
     <div class="flex-col group">
       <div class="flex-row items-center header">
-        <img class="image" src="../../images/92170897a875bf4e6e60e123fe08ea17.png" />
-        <span class="ml-12 text">在这里搜索你想要的...</span>
+        <img class="image" src="../../images/92170897a875bf4e6e60e123fe08ea17.png" />      
+        <input class="ml-12 text" type="text" v-model="search" placeholder="在这里搜索你想要的..." />
       </div>
       <div class="flex-row justify-between items-center group_2">
         <div class="flex-row items-center">
@@ -105,6 +107,21 @@
 </template>
 
 <style scoped lang="css">
+input {
+  border: none;
+  background: none;
+  padding: 0;
+  width: 60vw;
+}
+input:focus {
+  outline: none;
+}
+input::placeholder {
+  color: #888
+}
+input:focus::placeholder {
+  color: transparent;
+}
   .ml-19 {
     margin-left: 4.835vw;
   }
@@ -143,7 +160,7 @@
     height: 4.071vw;
   }
   .text {
-    color: #b7b7b7;
+    color: #888;
     font-size: 3.308vw;
     font-family: Inter;
     line-height: 3.084vw;

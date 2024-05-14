@@ -35,26 +35,28 @@
           <span class="mt-12 font text_3">872122756@bupt.edu.cn</span>
         </div>
         <div class="flex-col justify-start items-start self-stretch input view_1">
-          <span class="font text_4">我的昵称</span>
+          <input class="font text_4" placeholder="我的昵称" />
         </div>
         <div class="flex-col self-stretch group_4">
-          <div class="flex-col justify-start items-start input"><span class="font text_4">我的姓名</span></div>
+          <div class="flex-col justify-start items-start input">
+            <input class="font text_4" placeholder="我的姓名" />
+          </div>
           <div class="mt-28 flex-row items-center input_2">
             <img class="image_3" src="../../images/7220972e79dff0f6349d425eb6404847.png" />
             <div class="ml-16 section"></div>
-            <span class="ml-16 font text_5">手机号（中国+86）</span>
+            <input class="ml-16 font text_5" placeholder="手机号（中国+86）" />
           </div>
         </div>
         <div class="flex-row justify-between items-center self-stretch group_5">
-          <span class="font text_6">选择性别</span>
+          <input class="font text_6" placeholder="选择性别" />
           <img class="image_4" src="../../images/03e6f3565b0b1584e44e8beddde56b23.png" />
         </div>
         <div class="flex-col justify-start items-start self-stretch input view">
-          <span class="font text_4">我的生日</span>
+          <input class="font text_4" placeholder="我的生日" />
         </div>
-        <div class="flex-col justify-start items-center self-center text-wrapper_2" @click="onClick_1">
+        <button class="flex-col justify-start items-center self-center text-wrapper_2" @click="onClick_1">
           <span class="text_7">更新</span>
-        </div>
+        </button>
       </div>
       <div class="flex-col justify-start section_2">
         <div class="flex-row equal-division">
@@ -85,6 +87,24 @@
 </template>
 
 <style scoped lang="css">
+ input {
+  border: none;
+  background: none;
+  padding: 0;
+  width: 60vw;
+}
+input::placeholder {
+  color: #555
+}
+input:focus {
+  outline: none;
+}
+input:focus::placeholder {
+  color: transparent;
+}
+button {
+  border: none; 
+}
   .ml-125 {
     margin-left: 31.807vw;
   }

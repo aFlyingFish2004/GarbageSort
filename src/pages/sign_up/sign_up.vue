@@ -1,12 +1,18 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
 
   const props = defineProps({});
 
   const data = reactive({});
 
   const router = useRouter();
+
+  const name = ref('')
+  const email = ref('')
+  const password = ref('')
+  const confirmPpassword = ref('')
+  const isChecked = ref(false)
 
   function onClick() {
     router.back();
@@ -33,31 +39,31 @@
     <div class="flex-col group">
       <span class="self-start font text_2">姓名</span>
       <div class="flex-col justify-start items-start self-stretch text-wrapper_1">
-        <span class="font_2 text_3 text_15">ex: jon smith</span>
+        <input class="font_2 text_3 text_4" type="text" v-model="name" placeholder="ex: jon smith" />
       </div>
       <span class="self-start font text_5">邮箱</span>
       <div class="flex-col justify-start items-start self-stretch text-wrapper_1">
-        <span class="font_2 text_3 text_4">ex: jon.smith@email.com</span>
+        <input class="font_2 text_3 text_4" type="text" v-model="email" placeholder="ex: jon.smith@email.com" />
       </div>
       <span class="self-start font text_5">密码</span>
-      <div class="flex-col justify-start items-start self-stretch input_2 text-wrapper">
-        <span class="font_3 text_3 text_1">*********</span>
+      <div class="flex-col justify-start items-start self-stretch text-wrapper_1">
+        <input class="font_2 text_3 text_4" type="password" v-model="password" placeholder="Password" />
       </div>
       <span class="self-start font text_5">确认密码</span>
-      <div class="flex-col justify-start items-start self-stretch input_2 text-wrapper">
-        <span class="font_3 text_3 text_1">*********</span>
+      <div class="flex-col justify-start items-start self-stretch text-wrapper_1">
+        <input class="font_2 text_3 text_4" type="password" v-model="confirmPpassword" placeholder="Password" />
       </div>
       <div class="flex-row self-stretch group_2">
-        <div class="group_3"></div>
+          <input type="checkbox" class="group_3" id="checkbox" v-model="isChecked" />
         <div class="group_4 ml-9">
-          <span class="font_4 text_9">我同意</span>
+          <label for="checkbox" class="font_4 text_9">我同意</label>
           <span class="font_4 text_10">用户协议</span>
-          <span class="text_11">.</span>
+          <label for="checkbox" class="text_11">.</label>
         </div>
       </div>
-      <div class="flex-col justify-start items-center self-stretch text-wrapper_2" @click="onClick_1">
+      <button class="flex-col justify-start items-center self-stretch text-wrapper_2" @click="onClick_1">
         <span class="text_12">注册</span>
-      </div>
+      </button>
     </div>
     <div class="flex-col group_5">
       <span class="self-center font_2">或通过以下方式</span>
@@ -75,6 +81,21 @@
 </template>
 
 <style scoped lang="css">
+ input {
+  border: none;
+  background: none;
+  padding: 0;
+  width: 60vw;
+}
+input:focus {
+  outline: none;
+}
+input:focus::placeholder {
+  color: transparent;
+}
+button {
+  border: none; 
+}
   .mt-17 {
     margin-top: 4.326vw;
   }
@@ -134,12 +155,6 @@
     border-radius: 2.545vw;
     overflow: hidden;
   }
-  .input_2 {
-    padding: 4.323vw 0 4.936vw;
-    background-color: #f9f9f9;
-    border-radius: 2.545vw;
-    overflow: hidden;
-  }
   .text-wrapper {
     margin-right: 4.326vw;
     margin-top: 2.98vw;
@@ -165,6 +180,7 @@
   .group_4 {
     line-height: 2.845vw;
     height: 2.845vw;
+    margin-top: .6vw;
   }
   .font_4 {
     font-size: 3.053vw;
