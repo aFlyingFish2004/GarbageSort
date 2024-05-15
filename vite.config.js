@@ -8,9 +8,9 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  server:{
+  server: {
     host: '10.122.210.57',
-    port: 5173,
+    port: 5173
   },
   resolve: {
     alias: {
