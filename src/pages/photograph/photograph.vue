@@ -12,11 +12,7 @@
     router.push({ name: 'home' });
   }
 
-  function onClick_1() {
-    router.push({ name: 'recognize_result' });
-  }
 
-  //获取视频流
   const mediaStreamTrack = ref({});
   const videoStream = ref(''); // 视频stream
   const imgSrc = ref(''); // 拍照图片
@@ -24,13 +20,14 @@
   let context = null;
   const video = ref(null)
   
+  //获取视频流
   const getCamera = () => {
     canvas = document.getElementById('canvasCamera');
     context = canvas.getContext('2d');
     if (navigator.mediaDevices === undefined) {
       navigator.mediaDevices = {};
     }
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }  })
       .then((stream) => {
         mediaStreamTrack.value = typeof stream.stop === 'function' ? stream : stream.getTracks()[0];
         videoStream.value = stream;
@@ -42,6 +39,23 @@
       });
   };
   
+  //切换前后摄像头
+  const switchCamera = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: (videoStream.value.getVideoTracks()[0].getSettings().facingMode === 'user') ? 'environment' : 'user'
+      }
+    });
+    videoStream.value = stream;
+    video.value.srcObject = stream;
+    video.value.play();
+  } catch (err) {
+    console.error('Failed to switch camera:', err);
+  }
+};
+
+
   const takePhoto = () => {
     console.log('拍照');
     const videoWidth = video.value.videoWidth; // 获取视频流的宽度
@@ -52,14 +66,21 @@
     canvas.height = videoHeight;
     context.drawImage(video.value, 0, 0, videoWidth, videoHeight);
     const image = canvas.toDataURL('image/png');
+    closeCamera()
     imgSrc.value = image;
+
+    setTimeout(() => {
+      router.push({ name: 'recognize_result' });
+  }, 1000);
   };
   
+  //打开摄像头
   const openCamera = () => {
     console.log('打开摄像头');
     getCamera();
   };
   
+  //关闭摄像头
   const closeCamera = () => {
     console.log('关闭摄像头');
     video.value.srcObject.getTracks()[0].stop();
@@ -88,14 +109,13 @@
         <div class="flex-row justify-between items-center buttons">
           <img class="album_button" src="../../images/f021282d9cadcb210411fcf1af1282c0.png" @click="openCamera" />
           <div class="flex-col justify-start items-center photo_button">
-            <img class="image_2" src="../../images/006988cd50ac0e6d285e307c37673de1.png" @click="closeCamera" />
+            <img class="image_2" src="../../images/006988cd50ac0e6d285e307c37673de1.png" @click="takePhoto" />
           </div>
           <div class="flex-col justify-start items-center photo_button">
-            <img class="change_button" src="../../images/44a21b179d9c82a587cbd2119e166494.png" @click="takePhoto" />
+            <img class="change_button" src="../../images/44a21b179d9c82a587cbd2119e166494.png" @click="switchCamera" />
           </div>
         </div>
       </div>
-      <div class="section_3 footer-fixed"></div>
     </div>
   </div>
 </template>
@@ -109,12 +129,12 @@ video {
   width: 100%;
 }
 .buttons {
-  height: 30vh;
+  height: 18vh;
   background-color: #7f7f7f;
-  padding: 13vh 1.781vw 7.125vw 2.036vw;
+  padding: 5vh 1.781vw 7.125vw 2.036vw;
 }
 .publish {
-  margin-top: 30vh;
+  margin-top: vh;
 }
 .tx_img {
   width: 100vw;
@@ -138,10 +158,6 @@ video {
     width: 3.562vw;
     height: 3.308vw;
   }
-  .section {
-    padding: 144.784vw 1.781vw 7.125vw 2.036vw;
-    background-color: rgba(30, 30, 30, .5686274509803921);
-  }
   .album_button {
     width: 18.321vw;
     height: 14.249vw;
@@ -152,10 +168,6 @@ video {
   .image_2 {
     width: 18.321vw;
     height: 18.321vw;
-  }
-  .section_3 {
-    background-color: #000;
-    height: 21.374vw;
   }
   .change_button {
     border-radius: 50%;
