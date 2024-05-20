@@ -1,12 +1,15 @@
 <script setup>
-  import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { useRouter, useRoute } from 'vue-router';
+  import { ref, reactive, onMounted, computed } from 'vue';
 
   const props = defineProps({});
 
   const data = reactive({});
 
   const router = useRouter();
+    
+  const route = useRoute();
+  const decodedImgSrc = computed(() => decodeURIComponent(route.query.imgSrc));
 
   function onClick() {
     router.push({ name: 'home' });
@@ -19,11 +22,12 @@
   function onClick_2() {
     router.push({ name: 'photograph' });
   }
+
 </script>
 
 <template>
   <div class="flex-col page">
-    <div class="flex-col justify-start items-start image-wrapper">
+    <div class="flex-col justify-start items-start image-wrapper" :style="{ backgroundImage: 'url(' + decodedImgSrc + ')' }">
       <img class="return" src="../../images/4c095678482b518c22b5db9dedc98c6d.png" @click="onClick" />
     </div>
     <div class="flex-col relative section">
@@ -93,7 +97,6 @@
   }
   .image-wrapper {
     padding: 9.092vw 0 76.659vw;
-    background-image: url('../../images/ab8b8f1f1bdf84f1b8da06e39b9bbf1c.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }

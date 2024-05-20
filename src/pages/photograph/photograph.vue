@@ -70,7 +70,7 @@
     imgSrc.value = image;
 
     setTimeout(() => {
-      router.push({ name: 'recognize_result' });
+      router.push({ name: 'recognize_result', query: { imgSrc: encodeURIComponent(image) } });
   }, 1000);
   };
   
