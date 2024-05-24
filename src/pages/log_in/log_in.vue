@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { ref, reactive, onMounted } from 'vue';
+  import { login } from '@/api/api';
 
   const props = defineProps({});
 
@@ -12,7 +13,15 @@
   const password = ref('')
 
   function onClick() {
-    router.push({ name: 'home' });
+    login(email.value, password.value)
+        .then(response => {
+            console.log('Login successful:', response.data);
+            router.push({ name: 'home' });
+        })
+        .catch(error => {
+            console.error('Login failed:', error.response.data);
+            // Handle login failure
+        });
   }
 
   function onClick_1() {
