@@ -25,6 +25,12 @@ export function account(name, email) {
     })      
 }
 
+export function infer(email) {
+    return axiosInstance.post(`${host}/main/infer/`, {
+        email: email,
+    })   
+}
+
 export function upload(formData) {
     return axiosInstance.post(`${host}/main/upload/`, formData, {
         headers: {
@@ -52,6 +58,12 @@ export function fetchImage(imageName) {
 
 export function fetchMessage(email) {
     return axiosInstance.get(`${host}/main/get_message/`, {
+        params: { email: email }
+    })
+}
+
+export function fetchInferMessage(email) {
+    return axiosInstance.get(`${host}/main/infer/`, {
         params: { email: email }
     })
 }

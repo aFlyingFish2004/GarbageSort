@@ -17,6 +17,7 @@ import rank from '../pages/community/rank.vue';
 import achivement from '../pages/community/achivement.vue';
 import comment from '../pages/comment/comment.vue';
 
+
 const routes = [
   {
     path: '/',

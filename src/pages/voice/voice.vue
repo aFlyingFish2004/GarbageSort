@@ -33,6 +33,7 @@ function startAnimation() {
     .then(response => {
       // console.log(response);
       // console.log(response.data);
+      console.log(response.data)
       console.log(response.data.output);
       data.text_result = response.data.output
       // console.log(111);

@@ -220,7 +220,7 @@ onMounted(() => {
   outline: none;
   width: 0;
   flex: 1;
-
+  font-size: 3.8vw;
 }
 
 .top .search input::placeholder {

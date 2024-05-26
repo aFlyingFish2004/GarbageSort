@@ -1,7 +1,7 @@
 <script setup>
   import { useRouter, useRoute } from 'vue-router';
   import { ref, reactive, onMounted, computed } from 'vue';
-  import { fetchImage, fetchMessage } from '@/api/api';
+  import { fetchImage, fetchInferMessage, fetchMessage, infer } from '@/api/api';
 
   const props = defineProps({});
 
@@ -14,6 +14,12 @@
   const email = ref(localStorage.getItem('userEmail') || '');
   const user_id = ref('')
   const photo_url = ref('')
+  const top1_pro = ref('')
+  const top2_pro = ref('')
+  const top3_pro = ref('')
+  const top1_res = ref('')
+  const top2_res = ref('')
+  const top3_res = ref('')
 
   function onClick() {
     router.push({ name: 'home' });
@@ -35,6 +41,20 @@
     console.error('Failed to fetch user name:', error);
   }
 }
+
+async function InferMessage() {
+    try{
+      const response = await fetchInferMessage(email.value);
+      top1_pro.value = response.data.top1_pro
+      top2_pro.value = response.data.top2_pro
+      top3_pro.value = response.data.top3_pro
+      top1_res.value = response.data.top1_res
+      top2_res.value = response.data.top2_res
+      top3_res.value = response.data.top3_res
+    } catch (error) {
+       console.error('Failed to fetch infer:', error);
+  }
+}
   
 const fetchAndDisplayImage = async (imageName) => {
   try {
@@ -50,6 +70,8 @@ onMounted(async () => {
   await fetchUserMessage();
   photo_url.value = user_id.value + '_ph.jpg';
   fetchAndDisplayImage(photo_url.value)
+  await InferMessage()
+  console.log(top1_res.value)
 });
 
 </script>
@@ -62,29 +84,29 @@ onMounted(async () => {
     <div class="flex-col relative section">
       <span class="self-center font">识别结果</span>
       <div class="flex-row justify-between items-center self-stretch section_1">
-        <span class="font_1 text">塑料袋</span>
+        <span class="font_1 text">{{ top1_res }}</span>
         <div class="flex-row items-center group">
           <span class="font_1">准确率</span>
           <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3">
-            <div class="flex-col justify-start items-center text-wrapper"><span class="font_3 text_3">89.2%</span></div>
+            <div class="flex-col justify-start items-center text-wrapper"><span class="font_3 text_3">{{ top1_pro }}</span></div>
           </div>
         </div>
       </div>
       <div class="flex-row justify-between items-center self-stretch section_1">
-        <span class="font_2 text">塑料杯</span>
+        <span class="font_2 text">{{ top2_res }}</span>
         <div class="flex-row items-center group">
           <span class="font_1">准确率</span>
           <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3">
-            <div class="flex-col justify-start items-end text-wrapper_2"><span class="font_3 text_3">72.2%</span></div>
+            <div class="flex-col justify-start items-end text-wrapper_2"><span class="font_3 text_3">{{ top2_pro }}</span></div>
           </div>
         </div>
       </div>
       <div class="flex-row justify-between items-center self-stretch section_1">
-        <span class="font_2 text">饮料</span>
+        <span class="font_2 text">{{ top3_res }}</span>
         <div class="flex-row items-center group">
           <span class="font_1">准确率</span>
           <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3">
-            <div class="flex-col justify-start items-end text-wrapper_3"><span class="font_3 text_3">52.2%</span></div>
+            <div class="flex-col justify-start items-end text-wrapper_3"><span class="font_3 text_3">{{ top3_pro }}</span></div>
           </div>
         </div>
       </div>
