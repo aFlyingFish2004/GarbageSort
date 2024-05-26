@@ -1,5 +1,12 @@
 <script setup>
   import { RouterView } from 'vue-router';
+  import globalState from '@/globalState';
+
+  // 从LocalStorage同步email到全局状态
+  const savedEmail = localStorage.getItem('userEmail');
+  if (savedEmail) {
+    globalState.email = savedEmail;
+  }
 </script>
 
 <template>

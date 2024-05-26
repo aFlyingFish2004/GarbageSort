@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { ref, reactive, onMounted } from 'vue';
+  import { upload, fetchMessage } from '@/api/api';
 
   const props = defineProps({});
 
@@ -9,6 +10,7 @@
   const router = useRouter();
 
   function onClick() {
+    closeCamera();
     router.push({ name: 'home' });
   }
 
@@ -19,6 +21,19 @@
   let canvas = null;
   let context = null;
   const video = ref(null)
+
+  const email = ref(localStorage.getItem('userEmail') || '');
+  const user_id = ref('')
+  const photo_url = ref('')
+
+  async function fetchUserMessage() {
+  try {
+    const response = await fetchMessage(email.value);
+    user_id.value = response.data.user_id;
+  } catch (error) {
+    console.error('Failed to fetch user name:', error);
+  }
+}
   
   //获取视频流
   const getCamera = () => {
@@ -69,10 +84,32 @@
     closeCamera()
     imgSrc.value = image;
 
-    setTimeout(() => {
-      router.push({ name: 'recognize_result', query: { imgSrc: encodeURIComponent(image) } });
-  }, 1000);
+    // 将 DataURL 转换为 Blob
+    const byteString = atob(image.split(',')[1]);
+    const mimeString = image.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ab], { type: mimeString });
+
+    // 使用 FormData 上传图片
+    const formData = new FormData();
+    console.log(photo_url.value)
+    formData.append('image', blob, photo_url.value);
+
+    upload(formData)
+      .then(response => {
+        console.log('上传成功', response.data);
+        router.push({ name: 'recognize_result', query: { imgSrc: encodeURIComponent(image) } });
+      })
+      .catch(error => {
+        console.error('上传失败', error.response.data);
+       alert(error.response.data.error);
+      });
   };
+
   
   //打开摄像头
   const openCamera = () => {
@@ -86,9 +123,15 @@
     video.value.srcObject.getTracks()[0].stop();
   };
   
-  onMounted(() => {
-    getCamera();
-  });
+  // onMounted(() => {
+  //   getCamera();
+  // });
+
+onMounted(async () => {
+  getCamera()
+  await fetchUserMessage();
+  photo_url.value = user_id.value + '_ph.jpg';
+});
   
 </script>
 

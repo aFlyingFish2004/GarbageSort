@@ -9,6 +9,14 @@ import My from '../pages/my/my.vue';
 import Sign_up from '../pages/sign_up/sign_up.vue';
 import My_model from '../pages/my_model/my_model.vue';
 
+//
+import community from '../pages/community/community.vue';
+import search from '../pages/search/search.vue';
+import voice from '../pages/voice/voice.vue';
+import rank from '../pages/community/rank.vue';
+import achivement from '../pages/community/achivement.vue';
+import comment from '../pages/comment/comment.vue';
+
 const routes = [
   {
     path: '/',
@@ -54,7 +62,37 @@ const routes = [
     path:'/my_model',
     name:'my_model',
     component:My_model,
-  }
+  },
+  {
+    path: '/community',
+    name: 'community',
+    component: community,
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: search,
+  },
+  {
+    path: '/voice',
+    name: 'voice',
+    component: voice,
+  },
+  {
+    path: '/rank',
+    name: 'rank',
+    component: rank,
+  },
+  {
+    path: '/achievement',
+    name: 'achivement',
+    component: achivement,
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    component: comment,
+  },
 ];
 
 const router = createRouter({

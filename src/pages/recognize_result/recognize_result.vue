@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter, useRoute } from 'vue-router';
   import { ref, reactive, onMounted, computed } from 'vue';
+  import { fetchImage, fetchMessage } from '@/api/api';
 
   const props = defineProps({});
 
@@ -9,7 +10,10 @@
   const router = useRouter();
     
   const route = useRoute();
-  const decodedImgSrc = computed(() => decodeURIComponent(route.query.imgSrc));
+  const decodedImgSrc = ref('')
+  const email = ref(localStorage.getItem('userEmail') || '');
+  const user_id = ref('')
+  const photo_url = ref('')
 
   function onClick() {
     router.push({ name: 'home' });
@@ -22,6 +26,31 @@
   function onClick_2() {
     router.push({ name: 'photograph' });
   }
+
+  async function fetchUserMessage() {
+  try {
+    const response = await fetchMessage(email.value);
+    user_id.value = response.data.user_id;
+  } catch (error) {
+    console.error('Failed to fetch user name:', error);
+  }
+}
+  
+const fetchAndDisplayImage = async (imageName) => {
+  try {
+    const response = await fetchImage(imageName);
+    const blob = await response.data;
+    decodedImgSrc.value = URL.createObjectURL(blob);
+  } catch (error) {
+    console.error('Error fetching image:', error);
+  }
+};
+
+onMounted(async () => {
+  await fetchUserMessage();
+  photo_url.value = user_id.value + '_ph.jpg';
+  fetchAndDisplayImage(photo_url.value)
+});
 
 </script>
 

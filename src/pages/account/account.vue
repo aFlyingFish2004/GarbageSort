@@ -1,6 +1,8 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
+  import { account } from '@/api/api';
+  import { fetchMessage, fetchImage, uploadAvatar } from '@/api/api';
 
   const props = defineProps({});
 
@@ -8,81 +10,126 @@
 
   const router = useRouter();
 
+  const name = ref('')
+  const input_name = ref('')
+  const f_name = ref('')
+  const phone = ref('')
+  const sex = ref('')
+  const birthday = ref('')
+  const email = ref(localStorage.getItem('userEmail') || '');
+  const avatar_url = ref('')
+  const avatar = ref('')
+
+  async function fetchUserMessage() {
+    try{
+      const response = await fetchMessage(email.value);
+      name.value = response.data.name;
+      avatar_url.value = response.data.avatar_url;
+    } catch (error) {
+       console.error('Failed to fetch user name:', error);
+  }
+}
+
+const fetchAndDisplayImage = async (imageName) => {
+  try {
+    const response = await fetchImage(imageName);
+    const blob = await response.data;
+    avatar.value = URL.createObjectURL(blob);
+  } catch (error) {
+    console.error('Error fetching image:', error);
+  }
+};
+
+
   function onClick() {
     router.push({ name: 'my' });
   }
 
   function onClick_1() {
-    router.push({ name: 'my' });
+    account(input_name.value, email.value)
+      .then(response => {
+        console.log('更新成功:', response.data);
+        router.push({ name: 'my' });
+      })
+      .catch(error => {
+          console.error('更新失败:', error.response.data);
+      });
+    // router.push({ name: 'my' });
   }
 
   function onClick_2() {
     router.push({ name: 'home' });
   }
+
+  function changeAvatar() {
+  document.querySelector('input[type="file"]').click();
+}
+
+async function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('email', email.value);
+    const response = await uploadAvatar(formData);
+    console.log('上传成功:', response.data);
+    await fetchUserMessage();
+    fetchAndDisplayImage(avatar_url.value);
+  } catch (error) {
+    console.error('上传失败:', error);
+  }
+}
+
+
+  onMounted(async () => {
+    await fetchUserMessage();
+    fetchAndDisplayImage(avatar_url.value);
+  });
 </script>
 
 <template>
   <div class="flex-col justify-start page">
     <div class="flex-col group">
       <div class="flex-row items-center header">
-        <img src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/6632313d5a7e3f0310306e22/6635a788bba59d0011c215ac/17147924121604625810.png" class="image">
+        <input type="file" @change="handleFileChange" ref="fileInput" style="display: none;" />
+        <img @click="onClick" src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/6632313d5a7e3f0310306e22/6635a788bba59d0011c215ac/17147924121604625810.png" class="image">
         <span class="font text ml-125">个人信息</span>
       </div>
       <div class="flex-col group_2">
-        <img class="self-center image_2" src="../../images/6386652d4b54021490bbc78f78ace4c2.png" />
+        <img class="self-center image_2" :src="avatar" @click="changeAvatar" />
         <div class="flex-col items-center self-stretch group_3">
-          <span class="text_2">aFlyingFish</span>
-          <span class="mt-12 font text_3">872122756@bupt.edu.cn</span>
+          <span class="text_2">{{ name }}</span>
+          <span class="mt-12 font text_3">{{ email }}</span>
         </div>
         <div class="flex-col justify-start items-start self-stretch input view_1">
-          <input class="font text_4" placeholder="我的昵称" />
+          <input class="font text_4" v-model="input_name" placeholder="我的昵称" />
         </div>
         <div class="flex-col self-stretch group_4">
           <div class="flex-col justify-start items-start input">
-            <input class="font text_4" placeholder="我的姓名" />
+            <input class="font text_4" v-model="f_name" placeholder="我的姓名" />
           </div>
           <div class="mt-28 flex-row items-center input_2">
             <img class="image_3" src="../../images/7220972e79dff0f6349d425eb6404847.png" />
             <div class="ml-16 section"></div>
-            <input class="ml-16 font text_5" placeholder="手机号（中国+86）" />
+            <input class="ml-16 font text_5" v-model="phone" placeholder="手机号（中国+86）" />
           </div>
         </div>
         <div class="flex-row justify-between items-center self-stretch group_5">
-          <input class="font text_6" placeholder="选择性别" />
+          <input class="font text_6" v-model="sex" placeholder="选择性别" />
           <img class="image_4" src="../../images/03e6f3565b0b1584e44e8beddde56b23.png" />
         </div>
         <div class="flex-col justify-start items-start self-stretch input view">
-          <input class="font text_4" placeholder="我的生日" />
+          <input class="font text_4" v-model="birthday" placeholder="我的生日" />
         </div>
         <button class="flex-col justify-start items-center self-center text-wrapper_2" @click="onClick_1">
           <span class="text_7">更新</span>
         </button>
       </div>
-      <div class="flex-col justify-start section_2">
-        <div class="flex-row equal-division">
-          <div class="flex-col items-center group_6 group_1" @click="onClick_2">
-            <img class="image_5" src="../../images/43432482adf17d3e9a2a1593129f25c6.png" />
-            <span class="mt-8 font_2 text_8">主页</span>
-          </div>
-          <div class="flex-col items-center group_6 group_7">
-            <img class="image_5" src="../../images/db56fc14eac6b9636db5ee07b1237812.png" />
-            <span class="mt-8 font_2 text_9">搜索</span>
-          </div>
-          <div class="flex-col items-center group_6 group_8">
-            <img class="image_5" src="../../images/1b05aacdc6de02b9e50761fc1f10c80d.png" />
-            <span class="mt-8 font_2 text_10">拍照</span>
-          </div>
-          <div class="flex-col items-center group_6 group_9">
-            <img class="image_5" src="../../images/8e93d5ea68c77dca67d3ddde0e5d7419.png" />
-            <span class="mt-8 font_2 text_11">社区</span>
-          </div>
-          <div class="flex-col items-center group_6 group_10">
-            <img class="image_5" src="../../images/21f24a7efd9b4884368c28f83c8c7ad8.png" />
-            <span class="mt-8 font_2 text_12">我的</span>
-          </div>
-        </div>
-      </div>
     </div>
+    <!-- 底部导航栏 -->
+    <tabBar :select="4" />
   </div>
 </template>
 
@@ -110,6 +157,7 @@ button {
   }
   .page {
     background-color: #ffffff;
+    padding-bottom: 20vw;
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;

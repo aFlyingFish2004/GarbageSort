@@ -2,13 +2,13 @@
   import { useRouter } from 'vue-router';
   import { ref, reactive, onMounted } from 'vue';
   import { login } from '@/api/api';
+  import globalState from '@/globalState';
 
   const props = defineProps({});
-
   const data = reactive({});
-
   const router = useRouter();
 
+  //用户表单数据
   const email = ref('');
   const password = ref('')
 
@@ -16,11 +16,34 @@
     login(email.value, password.value)
         .then(response => {
             console.log('Login successful:', response.data);
+            globalState.email = email.value; // 保存邮箱到全局状态
+            localStorage.setItem('userEmail', email.value); // 保存邮箱到LocalStorage
             router.push({ name: 'home' });
         })
         .catch(error => {
             console.error('Login failed:', error.response.data);
-            // Handle login failure
+            let errorMessage;
+            if (error.response && error.response.data) {
+                if (typeof error.response.data === 'string') {
+                    errorMessage = error.response.data;
+                } 
+                else if (typeof error.response.data === 'object') {
+                    
+                    if (error.response.data.error){
+                      errorMessage = error.response.data.error;
+                    }
+                    else{
+                      errorMessage = JSON.stringify(error.response.data);
+                    }
+                } 
+                else {
+                    errorMessage = 'An unknown error occurred';
+                }
+            } 
+            else {
+                errorMessage = 'An unknown error occurred';
+            }
+            alert(errorMessage);
         });
   }
 

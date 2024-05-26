@@ -1,6 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { ref, reactive, onMounted } from 'vue';
+  import { register } from '@/api/api';
 
   const props = defineProps({});
 
@@ -11,7 +12,7 @@
   const name = ref('')
   const email = ref('')
   const password = ref('')
-  const confirmPpassword = ref('')
+  const confirmPassword = ref('')
   const isChecked = ref(false)
 
   function onClick() {
@@ -19,7 +20,47 @@
   }
 
   function onClick_1() {
-    router.push({ name: 'log_in' });
+    // 验证输入内容
+    if (!email.value || !password.value || !confirmPassword.value || !isChecked.value) {
+      alert('请填写所有字段并同意用户协议');
+      return;
+    }
+
+    if (password.value !== confirmPassword.value) {
+      alert('密码和确认密码不一致');
+      return;
+    }
+
+    register(name.value, email.value, password.value)
+      .then(response => {
+        console.log('注册成功', response.data);
+        router.push({ name: 'log_in' });
+      })
+      .catch(error => {
+        console.error('注册失败', error.response.data);
+        let errorMessage;
+            if (error.response && error.response.data) {
+                if (typeof error.response.data === 'string') {
+                    errorMessage = error.response.data;
+                } 
+                else if (typeof error.response.data === 'object') {
+                    
+                    if (error.response.data.error){
+                      errorMessage = error.response.data.error;
+                    }
+                    else{
+                      errorMessage = JSON.stringify(error.response.data);
+                    }
+                } 
+                else {
+                    errorMessage = 'An unknown error occurred';
+                }
+            } 
+            else {
+                errorMessage = 'An unknown error occurred';
+            }
+            alert(errorMessage);
+      });
   }
 
   function onClick_2() {
@@ -51,7 +92,7 @@
       </div>
       <span class="self-start font text_5">确认密码</span>
       <div class="flex-col justify-start items-start self-stretch text-wrapper_1">
-        <input class="font_2 text_3 text_4" type="password" v-model="confirmPpassword" placeholder="Password" />
+        <input class="font_2 text_3 text_4" type="password" v-model="confirmPassword" placeholder="Password" />
       </div>
       <div class="flex-row self-stretch group_2">
           <input type="checkbox" class="group_3" id="checkbox" v-model="isChecked" />

@@ -1,12 +1,17 @@
 <script setup>
   import { useRouter } from 'vue-router';
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
+  import { fetchMessage, fetchImage } from '@/api/api';
 
   const props = defineProps({});
-
   const data = reactive({});
-
   const router = useRouter();
+
+  //用户信息
+  const name = ref('')
+  const email = ref(localStorage.getItem('userEmail') || '');
+  const avatar_url = ref('')
+  const avatar = ref('')
 
   function onClick() {
     router.push({ name: 'account' });
@@ -19,6 +24,32 @@
   function onClick_2() {
     router.push({ name: 'home' });
   }
+
+  async function fetchUserMessage() {
+    try{
+      const response = await fetchMessage(email.value);
+      name.value = response.data.name;
+      avatar_url.value = response.data.avatar_url;
+    } catch (error) {
+       console.error('Failed to fetch user name:', error);
+  }
+}
+
+const fetchAndDisplayImage = async (imageName) => {
+  try {
+    const response = await fetchImage(imageName);
+    const blob = await response.data;
+    avatar.value = URL.createObjectURL(blob);
+  } catch (error) {
+    console.error('Error fetching image:', error);
+  }
+};
+
+onMounted(async () => {
+    await fetchUserMessage();
+    fetchAndDisplayImage(avatar_url.value);
+  });
+
 </script>
 
 <template>
@@ -29,10 +60,10 @@
         <div class="flex-col self-stretch group_1">
           <div class="flex-row items-center relative section">
             <div class="flex-col justify-start items-center image-wrapper">
-              <img class="image" src="../../images/b1cbac6f5c3cfb7bf3dc9e30cf7b949b.png" />
+              <img class="image" :src="avatar" />
             </div>
             <div class="ml-12 flex-col items-start flex-1">
-              <span class="text_2">aFlyingFish</span>
+              <span class="text_2">{{ name }}</span>
               <span class="mt-6 font text_3">正式会员</span>
             </div>
           </div>
@@ -113,28 +144,8 @@
         </div>
       </div>
     </div>
-    <div class="mt-14 flex-row equal-division">
-      <div class="flex-col items-center group_3 group_4" @click="onClick_2">
-        <img class="image_6" src="../../images/43432482adf17d3e9a2a1593129f25c6.png" />
-        <span class="mt-8 font_3 text_15">主页</span>
-      </div>
-      <div class="flex-col items-center group_3 group_5">
-        <img class="image_6" src="../../images/db56fc14eac6b9636db5ee07b1237812.png" />
-        <span class="mt-8 font_3 text_16">搜索</span>
-      </div>
-      <div class="flex-col items-center group_3 group_6">
-        <img class="image_6" src="../../images/1b05aacdc6de02b9e50761fc1f10c80d.png" />
-        <span class="mt-8 font_3 text_17">拍照</span>
-      </div>
-      <div class="flex-col items-center group_3 group_7">
-        <img class="image_6" src="../../images/8e93d5ea68c77dca67d3ddde0e5d7419.png" />
-        <span class="mt-8 font_3 text_18">社区</span>
-      </div>
-      <div class="flex-col items-center group_3 group_8">
-        <img class="image_6" src="../../images/21f24a7efd9b4884368c28f83c8c7ad8.png" />
-        <span class="mt-8 font_3 text_19">我的</span>
-      </div>
-    </div>
+    <!-- 底部导航栏 -->
+    <tabBar :select="4" />
   </div>
 </template>
 
@@ -144,6 +155,7 @@
   }
   .page {
     padding: 4.066vw 0 10.957vw;
+    padding-bottom: 20vw;
     background-color: #fff;
     width: 100%;
     overflow-y: auto;
