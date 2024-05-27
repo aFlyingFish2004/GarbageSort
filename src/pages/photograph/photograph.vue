@@ -1,7 +1,7 @@
 <script setup>
   import { useRouter } from 'vue-router';
   import { ref, reactive, onMounted } from 'vue';
-  import { upload, fetchMessage } from '@/api/api';
+  import { upload, fetchMessage, uploadPhoto } from '@/api/api';
 
   const props = defineProps({});
 
@@ -127,6 +127,27 @@
   //   getCamera();
   // });
 
+  function selectPhoto() {
+  document.querySelector('input[type="file"]').click();
+}
+
+async function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('email', email.value);
+    const response = await uploadPhoto(formData);
+    console.log('上传成功:', response.data);
+    closeCamera()
+    router.push({ name: 'recognize_result' });
+  } catch (error) {
+    console.error('上传失败:', error);
+  }
+}
+
 onMounted(async () => {
   getCamera()
   await fetchUserMessage();
@@ -136,6 +157,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <input type="file" @change="handleFileChange" ref="fileInput" style="display: none;" />
   <div class="flex-col justify-start page">
     <div class="flex-col group">
       <div class="flex-col justify-start items-start header">
@@ -150,7 +172,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex-row justify-between items-center buttons">
-          <img class="album_button" src="../../images/f021282d9cadcb210411fcf1af1282c0.png" @click="openCamera" />
+          <img class="album_button" src="../../images/f021282d9cadcb210411fcf1af1282c0.png" @click="selectPhoto" />
           <div class="flex-col justify-start items-center photo_button">
             <img class="image_2" src="../../images/006988cd50ac0e6d285e307c37673de1.png" @click="takePhoto" />
           </div>

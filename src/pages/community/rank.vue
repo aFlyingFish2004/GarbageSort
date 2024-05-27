@@ -164,7 +164,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <img class="image" src="../../images/xiyang098/5f75d39751dd7fc3326ebb162726d3fa.png" />
   <!-- 顶部区域 -->
   <div class="top">
     <img class="back" @click="goBack" src="../../images/xiyang098/a0826ba5fc994a76749cd5cb2d23b553.png" alt="">

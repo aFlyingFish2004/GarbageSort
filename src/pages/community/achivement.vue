@@ -59,7 +59,6 @@ onMounted(async () => {
 
 <template>
 <div class="flex-col page">
-  <div class="header"></div>
   <div class="flex-col flex-1 group">
     <div class="flex-row items-center group_2">
       <img class="image" @click="goBack" src="../../images/xiyang098/a0826ba5fc994a76749cd5cb2d23b553.png" />

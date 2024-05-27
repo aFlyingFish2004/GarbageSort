@@ -20,5 +20,11 @@ export default defineConfig({
       key: fs.readFileSync('./certificates/private.key'),
       cert: fs.readFileSync('./certificates/certificate.crt'),
     }
-  }
+  },
+  build: {
+    outDir: 'dist',  // 输出目录
+    assetsDir: 'static',  // 静态资源目录
+  },
+  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],  // 包含的静态资源类型
+  base: '/'  // 公共路径
 })

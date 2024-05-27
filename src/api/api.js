@@ -47,6 +47,14 @@ export function uploadAvatar(formData) {
     })
 }
 
+export function uploadPhoto(formData) {
+    return axiosInstance.post(`${host}/main/upload_photo/`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+    })
+}
+
 export function fetchImage(imageName) {
     return axiosInstance.get(`${host}/main/get_image/`, {
         params: {
