@@ -23,4 +23,4 @@ class MediaSerializer(serializers.ModelSerializer):
 class ModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Model
-        fields = ['model_id', 'user', 'model_path', 'model_description', 'created_at', 'images']
+        fields = ['model_id', 'user', 'model_name', 'model_path', 'model_description', 'created_at', 'images', 'status']

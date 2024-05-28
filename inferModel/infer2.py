@@ -67,7 +67,7 @@ def infer_image(model, folder_path, image_name, label_map):
         res_list = []
         for label, prob in prediction:
             print(f"  Predicted class: {label}, Similarity: {prob:.4f}")
-            res_list.append((label, format(float(format(prob, ".4f")), '.00%')))
+            res_list.append((label, format(prob, ".4f")))
         return res_list
     else:
         print(f"Image {image_name} not found in folder {folder_path} or unsupported file type.")
