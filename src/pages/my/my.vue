@@ -25,6 +25,11 @@
     router.push({ name: 'home' });
   }
 
+  function onClick_3()
+  {
+    router.push({name:'my_model'})
+  }
+
   async function fetchUserMessage() {
     try{
       const response = await fetchMessage(email.value);
@@ -92,7 +97,7 @@ onMounted(async () => {
                 </div>
                 <img class="image_3" src="../../images/cc384e6e23b61b0cf448c97004b10949.png" />
               </div>
-              <div class="flex-row justify-between items-center mt-25">
+              <div class="flex-row justify-between items-center mt-25" @click="onClick_3">
                 <div class="flex-row items-center">
                   <img class="image_5" src="../../images/7c538df0d704d28c82642b8e6148f31d.png" />
                   <div class="ml-16 flex-col items-start">

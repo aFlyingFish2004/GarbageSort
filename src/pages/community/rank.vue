@@ -4,7 +4,12 @@ import { reactive, ref, onMounted } from 'vue';
 import axios from 'axios';
 import { fetchImage, fetchMessage } from '@/api/api';
 
-
+import backIcon from '@/images/xiyang098/a0826ba5fc994a76749cd5cb2d23b553.png';
+import flashIcon1 from '@/images/xiyang098/21c156ae6b1a260a46a962dcbc812923.png';
+import flashIcon2 from '@/images/xiyang098/a2905898fecb1d55de08e853b81b4bb2.png';
+import medalGold from '@/images/xiyang098/5f1e6d5d26580e087eb10e58fa55f044.png';
+import medalSilver from '@/images/xiyang098/9c38658efe1093c625626f0eca4d6bd1.png';
+import medalBronze from '@/images/xiyang098/17c22384c7704bf8632c3e669a02f599.png';
 
 const data = reactive({
   items: [null, null, null, null, null, null, null],
@@ -13,53 +18,9 @@ const data = reactive({
       avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
       nickName: 'aFlyingFish',
       score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }, {
-      avatarUrl: '/src/images/xiyang098/32bffa27f862e68b6bd6505f0693d1de.png',
-      nickName: 'aFlyingFish',
-      score: 5000
-    }
+    },
+    // more items...
   ]
-
 });
 
 const router = useRouter();
@@ -67,25 +28,22 @@ const goBack = () => {
   router.back();
 };
 
-
 const userInfo = ref(null);
 
-axios.get('https://10.122.210.57:8000/main/userInfo/')
+axios.get('https://garbage.sa1ge.ink/main/userInfo/')
   .then(response => {
     userInfo.value = response.data;
     console.log(userInfo.value);
-    // console.log(userInfo.value);
   })
   .catch(error => {
     console.error(error);
   });
 
-
 const email = ref(localStorage.getItem('userEmail') || '');  
-const myInfo = ref({})
+const myInfo = ref({});
 let userRank = 1; // 排名通常从1开始  
-const avatar_url = ref('')
-const avatar = ref('')
+const avatar_url = ref('');
+const avatar = ref('');
 
 async function fetchUserMessage() {
   try {
@@ -108,120 +66,80 @@ const fetchAndDisplayImage = async (imageName) => {
 
 onMounted(async () => {
   try {
-    // console.log(111);
-    const response = await axios.get(`https://10.122.210.57:8000/main/get-by-email/${email.value}/`)  // 发送GET请求到Django视图  
-    myInfo.value = response.data  // 将返回的用户信息存储在响应式引用中 
-    console.log(typeof myInfo.value);
+    const response = await axios.get(`https://garbage.sa1ge.ink/main/get-by-email/${email.value}/`);
+    myInfo.value = response.data;
     
     await fetchUserMessage();
     avatar.value = await fetchAndDisplayImage(avatar_url.value);
 
-    // for (const user of userInfo.value) {
-    //   user.avatar = ref('')
-    // }
-    // console.log(myInfo.value)
-
     userInfo.value.forEach(async(user) => {
-      try {  
-        // 调用 fetchAvatar 函数获取头像，并等待其完成（注意这里使用了 async/await）  
-        const avatarData = await fetchAndDisplayImage(user.avatar_url);  
-        // 将获取到的头像数据赋值给新的 avatar 属性  
-        user.avatar = avatarData;  
-    } catch (error) {  
-        // 处理可能出现的错误  
-        console.error(`Error fetching avatar for ${user.user_name}:`, error);  
-    } 
-    })
-    console.log(userInfo.value)
-  
+      try {
+        const avatarData = await fetchAndDisplayImage(user.avatar_url);
+        user.avatar = avatarData;
+      } catch (error) {
+        console.error(`Error fetching avatar for ${user.user_name}:`, error);
+      }
+    });
 
-    // 要查找的用户名  
     const targetUserName = myInfo.value.user_name;
 
-    // 遍历用户信息数组，找到目标用户的排名  
-    // let targetUser = null;
     for (const user of userInfo.value) {
       if (user.user_name === targetUserName) {
-        // targetUser = user; // 可以保存用户对象以供后续使用  
-        break; // 找到目标用户后退出循环  
+        break;
       }
-      userRank++; // 如果没有找到目标用户，则增加排名  
+      userRank++;
     }
-
-    // // 检查是否找到了目标用户  
-    // if (targetUser) {
-    //   console.log(`用户 ${targetUser.name} 的排名是 ${userRank}`);
-    // } else {
-    //   console.log(`没有找到用户 ${targetUserName}`);
-    // }
-
   } catch (error) {
-    console.error('Error fetching user info:', error)
+    console.error('Error fetching user info:', error);
   }
-})
-
-
+});
 </script>
 
 <template>
-  <!-- 顶部区域 -->
-  <div class="top">
-    <img class="back" @click="goBack" src="../../images/xiyang098/a0826ba5fc994a76749cd5cb2d23b553.png" alt="">
-    <div class="title">积分榜</div>
-    <img class="flash1" src="../../images/xiyang098/21c156ae6b1a260a46a962dcbc812923.png" alt="">
-    <img class="flash2" src="../../images/xiyang098/a2905898fecb1d55de08e853b81b4bb2.png" alt="">
-  </div>
-  <!-- 排行榜 -->
-  <div class="rank-item myrank">
-    <div class="left">
-      <div class="rank" v-if="userRank === 1"><img src="/src/images/xiyang098/5f1e6d5d26580e087eb10e58fa55f044.png"
-          alt="" class="medal"></div>
-      <div class="rank" v-else-if="userRank === 2"><img
-          src="/src/images/xiyang098/9c38658efe1093c625626f0eca4d6bd1.png" alt="" class="medal"></div>
-      <div class="rank" v-else-if="userRank === 3"><img
-          src="/src/images/xiyang098/17c22384c7704bf8632c3e669a02f599.png" alt="" class="medal"></div>
-      <div class="rank" v-else>{{ userRank }}</div>
-      <div class="user">
-        <img :src="avatar" alt="" class="avatar">
-        <p class="nickName">{{ myInfo.user_name }}</p>
-      </div>
+  <div class="page">
+    <div class="top">
+      <img class="back" @click="goBack" :src="backIcon" alt="back">
+      <div class="title">积分榜</div>
+      <img class="flash1" :src="flashIcon1" alt="flash1">
+      <img class="flash2" :src="flashIcon2" alt="flash2">
     </div>
-    <p class="right">
-      {{ myInfo.score }}<span> 分</span>
-    </p>
-  </div>
-
-  <div class="rank-list">
-    <div class="rank-item" v-for="(item, index) in userInfo" :key="index">
+    <div class="rank-item myrank">
       <div class="left">
-        <div class="rank" v-if="index + 1 === 1"><img src="/src/images/xiyang098/5f1e6d5d26580e087eb10e58fa55f044.png"
-            alt="" class="medal"></div>
-        <div class="rank" v-else-if="index + 1 === 2"><img
-            src="/src/images/xiyang098/9c38658efe1093c625626f0eca4d6bd1.png" alt="" class="medal"></div>
-        <div class="rank" v-else-if="index + 1 === 3"><img
-            src="/src/images/xiyang098/17c22384c7704bf8632c3e669a02f599.png" alt="" class="medal"></div>
-        <div class="rank" v-else>{{ index + 1 }}</div>
+        <div class="rank" v-if="userRank === 1"><img :src="medalGold" alt="medal" class="medal"></div>
+        <div class="rank" v-else-if="userRank === 2"><img :src="medalSilver" alt="medal" class="medal"></div>
+        <div class="rank" v-else-if="userRank === 3"><img :src="medalBronze" alt="medal" class="medal"></div>
+        <div class="rank" v-else>{{ userRank }}</div>
         <div class="user">
-          <img :src="item.avatar" alt="" class="avatar">
-          <p class="nickName">{{ item.user_name }}</p>
+          <img :src="avatar" alt="avatar" class="avatar">
+          <p class="nickName">{{ myInfo.user_name }}</p>
         </div>
       </div>
-      <p class="right">
-        {{ item.score }} <span>分</span>
-      </p>
+      <p class="right">{{ myInfo.score }}<span> 分</span></p>
+    </div>
+    <div class="rank-list">
+      <div class="rank-item" v-for="(item, index) in userInfo" :key="index">
+        <div class="left">
+          <div class="rank" v-if="index + 1 === 1"><img :src="medalGold" alt="medal" class="medal"></div>
+          <div class="rank" v-else-if="index + 1 === 2"><img :src="medalSilver" alt="medal" class="medal"></div>
+          <div class="rank" v-else-if="index + 1 === 3"><img :src="medalBronze" alt="medal" class="medal"></div>
+          <div class="rank" v-else>{{ index + 1 }}</div>
+          <div class="user">
+            <img :src="item.avatar" alt="avatar" class="avatar">
+            <p class="nickName">{{ item.user_name }}</p>
+          </div>
+        </div>
+        <p class="right">{{ item.score }} <span>分</span></p>
+      </div>
     </div>
   </div>
-
-
-
-
-
 </template>
 
-<style scoped lang="css">
-.image {
-  width: 100vw;
-  height: 11.7048vw;
+<style scoped>
+.page {
+  background-color: #ffffff;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .top {
@@ -253,11 +171,9 @@ onMounted(async () => {
   left: 50%;
   top: 0;
   transform: translate(-50%, 1vw);
-
   mix-blend-mode: screen;
   width: 31.807vw;
   height: 8.397vw;
-
   animation: moveRight 1s ease-out;
 }
 
@@ -266,11 +182,9 @@ onMounted(async () => {
   right: 30.534vw;
   bottom: 0;
   transform: translate(2vw, -2vw);
-
   mix-blend-mode: screen;
   width: 37.405vw;
   height: 8.397vw;
-
   animation: moveLeft 1s ease-out;
 }
 
@@ -278,7 +192,6 @@ onMounted(async () => {
   from {
     transform: translate(calc(-50% - 15vw), 1vw);
   }
-
   to {
     transform: translate(-50%, 1vw);
   }
@@ -288,21 +201,16 @@ onMounted(async () => {
   from {
     transform: translate(calc(2vw + 15vw), -2vw);
   }
-
   to {
     transform: translate(2vw, -2vw);
   }
 }
 
-
-
-/* 排行榜区域 */
 .rank-item {
   padding: 0 5vw 3vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   font-size: 5.089vw;
   font-family: DM Sans;
   color: #000000;
@@ -323,7 +231,6 @@ onMounted(async () => {
 .left .rank {
   text-align: center;
   width: 10vw;
-  /* vertical-align: middle; */
   margin-right: 5vw;
 }
 

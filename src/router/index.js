@@ -8,7 +8,8 @@ import Account from '../pages/account/account.vue';
 import My from '../pages/my/my.vue';
 import Sign_up from '../pages/sign_up/sign_up.vue';
 import My_model from '../pages/my_model/my_model.vue';
-
+import Model_detail from '../pages/my_model/model_detail.vue';
+import New_model from '../pages/my_model/new_model.vue';
 //
 import community from '../pages/community/community.vue';
 import search from '../pages/search/search.vue';
@@ -16,7 +17,6 @@ import voice from '../pages/voice/voice.vue';
 import rank from '../pages/community/rank.vue';
 import achivement from '../pages/community/achivement.vue';
 import comment from '../pages/comment/comment.vue';
-
 
 const routes = [
   {
@@ -63,6 +63,16 @@ const routes = [
     path:'/my_model',
     name:'my_model',
     component:My_model,
+  },
+  {
+    path:'/new_model',
+    name:'new_model',
+    component:New_model,
+  },
+  {
+    path:'/model_detail',
+    name:'model_detail',
+    component:Model_detail,
   },
   {
     path: '/community',

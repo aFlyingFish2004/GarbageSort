@@ -15,6 +15,13 @@ const name = ref('aFlyingFish')
 const avatar_url = ref('')
 const avatar = ref('')
 
+const flag = ref(true);
+function handleAnimationEnd() {
+  flag.value = false; // 将flag设置为false
+  console.log('Animation ended, flag is now', flag.value);
+}
+
+
 async function fetchUserMessage() {
   try {
     const response = await fetchMessage(email.value);
@@ -59,7 +66,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex-col justify-start page">
+  <div class="animation" v-if="flag">
+    <div class="circle"></div>
+    <div class="sector" @animationend="handleAnimationEnd"></div>
+    <div class="sector2"></div>
+    <img src="../../images/xiyang098/logo.png" alt="" class="logo">
+  </div>
+  <div class="flex-col justify-start page" v-else>
     <div class="flex-col group">
       <div class="flex-row items-center header">
         <img class="image" src="../../images/92170897a875bf4e6e60e123fe08ea17.png" />
@@ -122,6 +135,84 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="css">
+/* 扇形样式 */
+.sector {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-100%);
+  width: 12vw;
+  height: 12vw;
+  border-radius: 0 100px 0 0;
+  background-color: #e0e0e0;
+
+  animation: spin 3s;
+  /* 应用动画 */
+}
+
+.sector2 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateY(-100%);
+  width: 12vw;
+  height: 12vw;
+  border-radius: 0 100px 0 0;
+  background-color: #e0e0e0;
+
+  animation: spin 2s infinite;
+  /* 应用动画 */
+}
+
+
+/* 定义旋转动画 */
+@keyframes spin {
+  0% {
+    transform-origin: bottom left;
+    /* 旋转的基点在底部左侧，即扇形的顶点 */
+    transform: translateY(-100%) rotate(0deg);
+  }
+
+  50% {
+    transform-origin: bottom left;
+    /* 旋转的基点在底部左侧，即扇形的顶点 */
+    transform: translateY(-100%) rotate(360deg);
+  }
+
+  100% {
+    transform-origin: bottom left;
+    transform: translateY(-100%) rotate(720deg);
+    /* 旋转720度，即两圈 */
+  }
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24vw;
+  height: 24vw;
+  border-radius: 50%;
+  background-color: #f3f3f3;
+  /* border: 0.2vw solid #bdbdbd; */
+}
+
+.logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20vw;
+  height: 20vw;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 0.2vw solid #bdbdbd;
+  animation: none;
+}
+
+
+
 input {
   border: none;
   background: none;

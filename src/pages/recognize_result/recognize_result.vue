@@ -1,41 +1,43 @@
 <script setup>
-  import { useRouter, useRoute } from 'vue-router';
-  import { ref, reactive, onMounted, computed } from 'vue';
-  import { fetchImage, fetchInferMessage, fetchMessage, infer } from '@/api/api';
+import { useRouter, useRoute } from 'vue-router';
+import { ref, reactive, onMounted } from 'vue';
+import { fetchImage, fetchInferMessage, fetchMessage } from '@/api/api';
 
-  const props = defineProps({});
+// 引入图像文件
+import returnIcon from '@/images/4c095678482b518c22b5db9dedc98c6d.png';
 
-  const data = reactive({});
+const props = defineProps({});
 
-  const router = useRouter();
-    
-  const route = useRoute();
-  const decodedImgSrc = ref('')
-  const email = ref(localStorage.getItem('userEmail') || '');
-  const user_id = ref('')
-  const photo_url = ref('')
-  const top1_pro = ref('')
-  const top2_pro = ref('')
-  const top3_pro = ref('')
-  const top1_res = ref('')
-  const top2_res = ref('')
-  const top3_res = ref('')
-  const top_res = ref('')
-  const knowledge = ref('加载中...')
+const data = reactive({});
 
-  function onClick() {
-    router.push({ name: 'home' });
-  }
+const router = useRouter();
+const route = useRoute();
+const decodedImgSrc = ref('');
+const email = ref(localStorage.getItem('userEmail') || '');
+const user_id = ref('');
+const photo_url = ref('');
+const top1_pro = ref('');
+const top2_pro = ref('');
+const top3_pro = ref('');
+const top1_res = ref('');
+const top2_res = ref('');
+const top3_res = ref('');
+const top_res = ref('');
+const knowledge = ref('加载中...');
 
-  function onClick_1() {
-    router.push({ name: 'feedback' });
-  }
+function onClick() {
+  router.push({ name: 'home' });
+}
 
-  function onClick_2() {
-    router.push({ name: 'photograph' });
-  }
+function onClick_1() {
+  router.push({ name: 'feedback' });
+}
 
-  async function fetchUserMessage() {
+function onClick_2() {
+  router.push({ name: 'photograph' });
+}
+
+async function fetchUserMessage() {
   try {
     const response = await fetchMessage(email.value);
     user_id.value = response.data.user_id;
@@ -45,39 +47,40 @@
 }
 
 async function InferMessage() {
-    try{
-      const response = await fetchInferMessage(email.value);
-      top1_pro.value = response.data.top1_pro
-      top2_pro.value = response.data.top2_pro
-      top3_pro.value = response.data.top3_pro
-      top1_res.value = response.data.top1_res
-      top2_res.value = response.data.top2_res
-      top3_res.value = response.data.top3_res
-      top_res.value = top1_res.value.slice(0,4)
-      top_res.value = top_res.value + '相关知识'
-      if (top_res.value.slice(0,1) === '有') {
-        knowledge.value = '有害垃圾，指生活垃圾中对人体健康或自然环境造成直接或潜在危害的物质。必须单独收集、运输、存贮，由环保部门认可的专业机构进行特殊安全处理。'
-      }
-      else if (top_res.value.slice(0,1) === '可') {
-          knowledge.value = '可回收物就是再生资源，指生活垃圾中未经污染、适宜回收循环利用的废物。主要包括废弃电器电子产品、废纸张、废塑料、废玻璃、废金属等五类'
-      }
-      else if (top_res.value.slice(0,1) === '厨') {
-        knowledge.value = '厨余垃圾是指居民日常生活及食品加工、饮食服务、单位供餐等活动中产生的垃圾，包括丢弃不用的菜叶、剩菜、剩饭、果皮、蛋壳、茶渣、骨头（鸡骨、鱼刺类）等'
-      }
-      else if (top_res.value.slice(0,1) === '其') {
-        knowledge.value = '其他垃圾，指除可回收物、有害垃圾、餐厨垃圾外的其他生活垃圾。即现环卫体系主要收集和处理的垃圾，一般都采取填埋、焚烧等方法处理，部分还可以使用生物分解的方法解决'
-      }
-      else if (top_res.value.slice(0,1) === '学') {
-        knowledge.value = '哈哈，谁教你这样拍的'
-      }
-      else {
-        knowledge.value = '似乎出了点问题~'
-      }
-    } catch (error) {
-       console.error('Failed to fetch infer:', error);
+  try {
+    const response = await fetchInferMessage(email.value);
+    top1_pro.value = response.data.top1_pro;
+    top2_pro.value = response.data.top2_pro;
+    top3_pro.value = response.data.top3_pro;
+    top1_res.value = response.data.top1_res;
+    top2_res.value = response.data.top2_res;
+    top3_res.value = response.data.top3_res;
+    top_res.value = top1_res.value.slice(0, 4) + '相关知识';
+
+    switch (top_res.value.slice(0, 1)) {
+      case '有':
+        knowledge.value = '有害垃圾，指生活垃圾中对人体健康或自然环境造成直接或潜在危害的物质。必须单独收集、运输、存贮，由环保部门认可的专业机构进行特殊安全处理。';
+        break;
+      case '可':
+        knowledge.value = '可回收物就是再生资源，指生活垃圾中未经污染、适宜回收循环利用的废物。主要包括废弃电器电子产品、废纸张、废塑料、废玻璃、废金属等五类';
+        break;
+      case '厨':
+        knowledge.value = '厨余垃圾是指居民日常生活及食品加工、饮食服务、单位供餐等活动中产生的垃圾，包括丢弃不用的菜叶、剩菜、剩饭、果皮、蛋壳、茶渣、骨头（鸡骨、鱼刺类）等';
+        break;
+      case '其':
+        knowledge.value = '其他垃圾，指除可回收物、有害垃圾、餐厨垃圾外的其他生活垃圾。即现环卫体系主要收集和处理的垃圾，一般都采取填埋、焚烧等方法处理，部分还可以使用生物分解的方法解决';
+        break;
+      case '学':
+        knowledge.value = '哈哈，谁教你这样拍的';
+        break;
+      default:
+        knowledge.value = '似乎出了点问题~';
+    }
+  } catch (error) {
+    console.error('Failed to fetch infer:', error);
   }
 }
-  
+
 const fetchAndDisplayImage = async (imageName) => {
   try {
     const response = await fetchImage(imageName);
@@ -91,28 +94,26 @@ const fetchAndDisplayImage = async (imageName) => {
 onMounted(async () => {
   await fetchUserMessage();
   photo_url.value = user_id.value + '_ph.jpg';
-  fetchAndDisplayImage(photo_url.value)
-  await InferMessage()
-  console.log(top1_res.value)
+  fetchAndDisplayImage(photo_url.value);
+  await InferMessage();
+  console.log(top1_res.value);
 });
-
 </script>
 
 <template>
   <div class="flex-col page">
     <div class="flex-col justify-start items-start image-wrapper" :style="{ backgroundImage: 'url(' + decodedImgSrc + ')' }">
-      <img class="return" src="../../images/4c095678482b518c22b5db9dedc98c6d.png" @click="onClick" />
+      <img class="return" :src="returnIcon" @click="onClick" />
     </div>
     <div class="flex-col relative section">
       <span class="self-center font">识别结果</span>
       <div class="flex-row justify-between items-center self-stretch section_1">
         <span class="font_1 text">{{ top1_res }}</span>
         <div class="flex-row items-center group">
-          <!-- <span class="font_1">准确率</span> -->
-          <span class="font_1">{{ ((top1_pro*100).toFixed(2))+'%' }}</span>
+          <span class="font_1">{{ ((top1_pro * 100).toFixed(2)) + '%' }}</span>
           <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3">
-            <div class="flex-col justify-start items-center text-wrapper" :style="{ width: `${(((top1_pro-0.05)*100).toFixed(2))+'%'}` }">
-              <span class="font_3 text_3 centered-text" style="color: rgba(0, 0, 0, 0)">{{ ((top1_pro*100).toFixed(2))+'%' }}</span>
+            <div class="flex-col justify-start items-center text-wrapper" :style="{ width: `${(((top1_pro - 0.05) * 100).toFixed(2)) + '%'}` }">
+              <span class="font_3 text_3 centered-text" style="color: rgba(0, 0, 0, 0)">{{ ((top1_pro * 100).toFixed(2)) + '%' }}</span>
             </div>
           </div>
         </div>
@@ -120,10 +121,9 @@ onMounted(async () => {
       <div class="flex-row justify-between items-center self-stretch section_1">
         <span class="font_2 text">{{ top2_res }}</span>
         <div class="flex-row items-center group">
-          <!-- <span class="font_1">准确率</span> -->
-          <span class="font_1">{{ ((top2_pro*100).toFixed(2))+'%' }}</span>
-          <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3" >
-            <div class="flex-col justify-start items-end text-wrapper_2" :style="{ width: `${((top2_pro*100).toFixed(2))+'%'}` }">
+          <span class="font_1">{{ ((top2_pro * 100).toFixed(2)) + '%' }}</span>
+          <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3">
+            <div class="flex-col justify-start items-end text-wrapper_2" :style="{ width: `${((top2_pro * 100).toFixed(2)) + '%'}` }">
               <span class="font_3 text_3 centered-text" style="color: rgba(0, 0, 0, 0)">{{ top2_pro }}</span>
             </div>
           </div>
@@ -132,10 +132,9 @@ onMounted(async () => {
       <div class="flex-row justify-between items-center self-stretch section_1">
         <span class="font_2 text">{{ top3_res }}</span>
         <div class="flex-row items-center group">
-          <!-- <span class="font_1">准确率</span> -->
-          <span class="font_1">{{ ((top3_pro*100).toFixed(2))+'%' }}</span>
+          <span class="font_1">{{ ((top3_pro * 100).toFixed(2)) + '%' }}</span>
           <div class="flex-col justify-start items-start shrink-0 self-stretch button ml-3">
-            <div class="flex-col justify-start items-end text-wrapper_3" :style="{ width: `${((top3_pro*100).toFixed(2))+'%'}` }">
+            <div class="flex-col justify-start items-end text-wrapper_3" :style="{ width: `${((top3_pro * 100).toFixed(2)) + '%'}` }">
               <span class="font_3 text_3 centered-text" style="color: rgba(0, 0, 0, 0)">{{ top3_pro }}</span>
             </div>
           </div>
@@ -145,9 +144,7 @@ onMounted(async () => {
       <span class="self-center font text_5">{{ top_res }}</span>
       <div class="flex-col justify-start self-stretch group_2">
         <div class="flex-col justify-start text-wrapper_6">
-          <span class="text_6">
-            {{ knowledge }}
-          </span>
+          <span class="text_6">{{ knowledge }}</span>
         </div>
       </div>
     </div>
@@ -161,6 +158,7 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
 
 <style scoped lang="css">
 .centered-text {

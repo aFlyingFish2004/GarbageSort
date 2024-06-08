@@ -1,64 +1,71 @@
 <script setup>
-import { useRouter } from 'vue-router';
-// import { ref, reactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
+
+// 引入图标文件
+import homeIcon from '@/images/xiyang098/home.png'
+import homeActiveIcon from '@/images/xiyang098/home_active.png'
+import searchIcon from '@/images/xiyang098/search.png'
+import searchActiveIcon from '@/images/xiyang098/search_active.png'
+import photographIcon from '@/images/xiyang098/photograph.png'
+import photographActiveIcon from '@/images/xiyang098/photograph_active.png'
+import communityIcon from '@/images/xiyang098/community.png'
+import communityActiveIcon from '@/images/xiyang098/community_active.png'
+import myIcon from '@/images/xiyang098/my.png'
+import myActiveIcon from '@/images/xiyang098/my_active.png'
 
 const tabList = [{
   text: "主页",
-  iconPath: "/src/images/xiyang098/home.png",
-  selectedIconPath: "/src/images/xiyang098/home_active.png"
+  iconPath: homeIcon,
+  selectedIconPath: homeActiveIcon
 }, {
   text: "搜索",
-  iconPath: "/src/images/xiyang098/search.png",
-  selectedIconPath: "/src/images/xiyang098/search_active.png"
+  iconPath: searchIcon,
+  selectedIconPath: searchActiveIcon
 }, {
   text: "拍照",
-  iconPath: "/src/images/xiyang098/photograph.png",
-  selectedIconPath: "/src/images/xiyang098/photograph_active.png"
+  iconPath: photographIcon,
+  selectedIconPath: photographActiveIcon
 }, {
   text: "社区",
-  iconPath: "/src/images/xiyang098/community.png",
-  selectedIconPath: "/src/images/xiyang098/community_active.png"
+  iconPath: communityIcon,
+  selectedIconPath: communityActiveIcon
 }, {
   text: "我的",
-  iconPath: "/src/images/xiyang098/my.png",
-  selectedIconPath: "/src/images/xiyang098/my_active.png"
-},]
+  iconPath: myIcon,
+  selectedIconPath: myActiveIcon
+}]
 
 const props = defineProps({
   select: {
     type: Number,
-    required: true, // 如果 prop 是必需的，可以添加 required 属性  
-    // default: 0, // 如果不是必需的，可以提供一个默认值  
-  },
-});
-const router = useRouter();
+    required: true
+  }
+})
+
+const router = useRouter()
 
 function toSelect(index) {
   if (props.select !== index) {
     switch (index) {
       case 0:
-        router.push({ name: 'home' });
-        break;
+        router.push({ name: 'home' })
+        break
       case 1:
-        router.push({ name: 'search' });
-        break;
+        router.push({ name: 'search' })
+        break
       case 2:
-        router.push({ name: 'photograph' });
-        break;
+        router.push({ name: 'photograph' })
+        break
       case 3:
-        router.push({ name: 'community' });
-        break;
+        router.push({ name: 'community' })
+        break
       case 4:
-        router.push({ name: 'my' });
-        break;
+        router.push({ name: 'my' })
+        break
     }
-
   }
 }
-
-
 </script>
-
 
 <template>
   <div class="tabbar">
@@ -69,8 +76,6 @@ function toSelect(index) {
   </div>
 </template>
 
-
-
 <style scoped lang="css">
 .tabbar {
   width: 100%;
@@ -78,13 +83,8 @@ function toSelect(index) {
   background-color: #fff;
   position: fixed;
   bottom: 0;
-  /* height: 17vw; */
-
-  /* 避开不可见区域 */
-  /* padding-bottom: env(safe-area-inset-bottom); */
   padding-bottom: 2vw;
   padding-top: 2vw;
-
   border-top: 2px solid #f3f3f3;
 }
 
@@ -95,7 +95,6 @@ function toSelect(index) {
   justify-content: center;
   align-items: center;
   color: #8a8a8a;
-
   font-size: 3vw;
 }
 

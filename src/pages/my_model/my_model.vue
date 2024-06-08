@@ -1,108 +1,128 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
+import { fetchMessage, createModel, getModels, getRandomImageByFolder } from '@/api/api';
 
 const props = defineProps({});
 
 const data = reactive({});
+const email = ref(localStorage.getItem('userEmail') || '');
+const user_id = ref('');
+const folder_url = ref('');
+const model_id = ref('');  // 新增的变量
+const models = ref([]); // 存储模型列表
 
 const router = useRouter();
+
+function onClick1() {
+  router.push({ name: 'my' });
+}
+
+async function onClick() {
+  await fetchUserMessage();
+  await handleCreateModel();
+}
+
+async function fetchUserMessage() {
+  try {
+    const response = await fetchMessage(email.value);
+    user_id.value = response.data.user_id;
+    await loadModels();  // 加载模型列表
+  } catch (error) {
+    console.error('Failed to fetch user info:', error);
+  }
+}
+
+async function handleCreateModel() {
+  try {
+    const response = await createModel(user_id.value);
+    folder_url.value = response.data.folder_url;
+    model_id.value = response.data.model_id;  // 获取 model_id
+    // 在创建模型成功后导航到新的模型页面
+    router.push({ name: 'new_model', query: { folder_url: folder_url.value, user_id: user_id.value, model_id: model_id.value } });
+  } catch (error) {
+    console.error('Error creating model:', error);
+  }
+}
+
+async function loadModels() {
+  try {
+    const response = await getModels(user_id.value);
+    models.value = response.data.models;
+    await loadModelImages();  // 加载模型图片
+  } catch (error) {
+    console.error('Failed to load models:', error);
+  }
+}
+
+async function loadModelImages() {
+  for (const model of models.value) {
+    if (model.images) {
+      try {
+        const response = await getRandomImageByFolder(model.images);
+        const blob = await response.data;
+        const url = URL.createObjectURL(blob);
+        model.image_url = url;  // 将图片 URL 保存到模型对象中
+      } catch (error) {
+        console.error('Failed to load image:', error);
+      }
+    }
+  }
+}
+
+function viewDetails(modelId) {
+  router.push({ name: 'model_detail', query: { model_id: modelId } });
+}
+
+onMounted(() => {
+  fetchUserMessage();
+});
 </script>
 
 <template>
 <div class="flex-col page">
-  <div class="flex-row justify-center items-center self-stretch relative group">
+  <div class="flex-row items-center header">
     <img
-      class="image pos"
-      src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=824283acfe845390be4089574f86a353.png"
+      class="back-arrow"
+      src="https://ide.code.fun/api/image?token=6653eca5602bd200126394b7&name=643e11766a93d71f4d786dabda17d139.png"
+      @click="onClick1"
     />
-    <span class="text">我的模型</span>
+    <span class="text ml-122">我的模型</span>
   </div>
   <div class="flex-col self-stretch group_2">
-    <div class="flex-row justify-between section">
+    <div v-for="model in models" :key="model.model_id" class="flex-row justify-between section" @click="viewDetails(model.model_id)">
       <img
         class="image_2"
-        src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=59c968c80bfef6d02569c62640546e02.png"
+        :src="model.image_url"
+        alt="model image"
       />
-      <div class="flex-row items-end self-start group_3">
-        <div class="flex-col items-center">
-          <span class="text_2">模型名</span>
-          <span class="font text_3">模型制作者</span>
-          <span class="font">自己的描述</span>
-        </div>
-        <div class="ml-46 flex-row items-center group_4">
-          <div class="flex-col justify-start items-center button"><span class="font text_4">已完成</span></div>
-          <img
-            class="image_3 ml-19"
-            src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=6de690b563d52abcde97853679620f76.png"
-          />
-        </div>
+      <div class="flex-col justify-center items-center flex-1">
+        <span class="text_2">{{ model.model_name }}</span>
+        <span class="font text_3">{{ model.model_description }}</span>
       </div>
-    </div>
-    <div class="flex-row justify-between section mt-7">
-      <img
-        class="image_2"
-        src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=59c968c80bfef6d02569c62640546e02.png"
-      />
-      <div class="flex-row items-center self-start group_5">
-        <div class="button_2"></div>
-        <img
-          class="image_3 ml-19"
-          src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=6de690b563d52abcde97853679620f76.png"
-        />
-      </div>
-    </div>
-    <div class="flex-row justify-between section mt-7">
-      <img
-        class="image_2"
-        src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=59c968c80bfef6d02569c62640546e02.png"
-      />
-      <div class="flex-row items-center self-start group_6">
-        <div class="button_2"></div>
-        <img
-          class="image_3 ml-19"
-          src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=6de690b563d52abcde97853679620f76.png"
-        />
-      </div>
-    </div>
-    <div class="flex-row justify-between section mt-7">
-      <img
-        class="image_2"
-        src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=59c968c80bfef6d02569c62640546e02.png"
-      />
-      <div class="flex-row items-center self-start group_7">
-        <div class="section_2"></div>
-        <img
-          class="image_3 ml-19"
-          src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=6de690b563d52abcde97853679620f76.png"
-        />
-      </div>
-    </div>
-    <div class="flex-row justify-between section mt-7">
-      <img
-        class="image_2"
-        src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=59c968c80bfef6d02569c62640546e02.png"
-      />
-      <div class="flex-row items-center self-start group_8">
-        <div class="button_2"></div>
-        <img
-          class="image_3 ml-19"
-          src="https://ide.code.fun/api/image?token=66431e0aa2432f00114e8100&name=6de690b563d52abcde97853679620f76.png"
-        />
+      <div class="flex-col justify-center items-center">
+        <span :class="{
+            'text_pending': model.status === 'pending', 
+            'text_training': model.status === 'training', 
+            'text_completed': model.status === 'completed'
+          }" class="status-text">
+          {{ model.status === 'pending' ? '审核中' : model.status === 'training' ? '训练中' : '已完成' }}
+        </span>
+        <div :class="{
+            'status_pending': model.status === 'pending', 
+            'status_training': model.status === 'training', 
+            'status_completed': model.status === 'completed'
+          }" class="status-block"></div>
       </div>
     </div>
   </div>
-  <div class="flex-col justify-start items-center self-center text-wrapper"><span class="text_5">新的模型</span></div>
+  <button class="flex-col justify-start items-center self-center text-wrapper" @click="onClick">
+    <span class="text_5">新的模型</span>
+  </button>
 </div>
 </template>
 
-<style scoped lang="css">
-.ml-19 {
-  margin-left: 1.19rem;
-}
-.mt-7 {
-  margin-top: 0.44rem;
-}
+<style scoped>
 .page {
   padding: 1.19rem 0 3.31rem;
   background-color: #ffffff;
@@ -111,112 +131,125 @@ const router = useRouter();
   overflow-x: hidden;
   height: 100%;
 }
-.group {
-  padding: 1.44rem 2.12rem 1.17rem;
-  border-bottom: solid 0.13rem #d9d9d9;
+
+.header {
+  padding: 1.5rem 2.12rem;
+  height: 4rem;
+  background-color: #f8f8f8;
+  box-shadow: 0 0.1rem 0.1rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
 }
-.image {
-  width: 0.88rem;
-  height: 0.81rem;
+
+.back-arrow {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
 }
-.pos {
-  position: absolute;
-  left: 2.12rem;
-  top: 1.17rem;
-}
+
 .text {
   color: #181d27;
-  font-size: 0.88rem;
+  font-size: 1.5rem;
   font-family: DM Sans;
   font-weight: 700;
-  line-height: 0.83rem;
+  line-height: 1.5rem;
+  margin-left: 1rem;
 }
+
 .group_2 {
-  padding-top: 0.94rem;
+  padding-top: 1rem;
 }
+
 .section {
   background-color: #ffffff;
-  box-shadow: 0rem 0.25rem 0.25rem #00000040;
+  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
 }
+
 .image_2 {
   width: 6.88rem;
-  height: 6.5rem;
+  height: 6.88rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid #ddd;
+  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
 }
-.group_3 {
-  margin-right: 1.13rem;
-  margin-top: 0.71rem;
-}
+
 .text_2 {
   color: #000000;
   font-size: 1rem;
   font-family: DM Sans;
   font-weight: 700;
-  line-height: 0.95rem;
+  line-height: 1rem;
+  text-align: center;
 }
+
 .font {
   font-size: 0.88rem;
   font-family: DM Sans;
   line-height: 1.19rem;
   color: #000000;
+  text-align: center;
+  margin-top: 0.5rem;
 }
-.text_3 {
-  margin-top: 0.14rem;
+
+.status-text {
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+  font-family: DM Sans;
 }
-.group_4 {
-  margin-bottom: 0.23rem;
+
+.status_pending {
+  color: #ff0000; /* 红色 */
 }
-.button {
-  padding: 0.7rem 0 0.55rem;
-  background-color: #00b140;
-  width: 4.06rem;
-  height: 2.06rem;
+
+.status_training {
+  color: #0000ff; /* 蓝色 */
 }
-.text_4 {
-  color: #ffffff;
-  line-height: 0.81rem;
+
+.status_completed {
+  color: #00b140; /* 绿色 */
 }
-.image_3 {
-  width: 0.44rem;
-  height: 0.75rem;
+
+.status-block {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.5rem;
 }
-.group_5 {
-  margin-right: 1.13rem;
-  margin-top: 1.88rem;
+
+.status_pending.status-block {
+  background-color: #ff0000; /* 红色 */
 }
-.button_2 {
-  background-color: #00b140;
-  width: 4.06rem;
-  height: 2.06rem;
+
+.status_training.status-block {
+  background-color: #0000ff; /* 蓝色 */
 }
-.group_6 {
-  margin-right: 1.13rem;
-  margin-top: 1.88rem;
+
+.status_completed.status-block {
+  background-color: #00b140; /* 绿色 */
 }
-.group_7 {
-  margin-right: 1.13rem;
-  margin-top: 1.88rem;
-}
-.section_2 {
-  background-color: #ee2222;
-  width: 4.06rem;
-  height: 2.06rem;
-}
-.group_8 {
-  margin-right: 1.13rem;
-  margin-top: 1.81rem;
-}
-.text-wrapper {
-  margin-top: 5.69rem;
-  padding: 1.54rem 0 1.41rem;
-  background-color: #00b140;
-  border-radius: 1.88rem;
-  width: 9.5rem;
-}
+
 .text_5 {
   color: #ffffff;
   font-size: 1.25rem;
   font-family: Inter;
   font-weight: 700;
   line-height: 1.18rem;
+}
+
+.text-wrapper {
+  padding: 1rem 2rem;
+  background-color: #00b140;
+  border-radius: 2rem;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 1rem;
+  text-align: center;
 }
 </style>

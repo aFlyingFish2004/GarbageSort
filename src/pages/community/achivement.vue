@@ -3,35 +3,44 @@ import { useRouter } from 'vue-router';
 import { reactive, onMounted, ref } from 'vue';
 import axios from 'axios';
 
+// 使用 import 语句引入图像文件
+import backIcon from '@/images/xiyang098/a0826ba5fc994a76749cd5cb2d23b553.png';
+import flashIcon1 from '@/images/xiyang098/21c156ae6b1a260a46a962dcbc812923.png';
+import flashIcon2 from '@/images/xiyang098/a2905898fecb1d55de08e853b81b4bb2.png';
+import medal1 from '@/images/xiyang098/96b01197c75773f6887c459149ea6e4b.png';
+import medal2 from '@/images/xiyang098/cc6a0475f9369ed4cf8407b75672d1f9.png';
+import medal3 from '@/images/xiyang098/f07bec031843797f8179d410895d74b3.png';
+import medal4 from '@/images/xiyang098/d2aae0de609478ffef63d38b76eaeee6.png';
+import medal5 from '@/images/xiyang098/3133f5cd54c6626dce43099a0ece7ea2.png';
+
 const data = reactive({
   items: [
     {
-      url: '/src/images/xiyang098/96b01197c75773f6887c459149ea6e4b.png', 
+      url: medal1, 
       date: '2024.3.22',
       score: 100
     },
     {
-      url: '/src/images/xiyang098/cc6a0475f9369ed4cf8407b75672d1f9.png',
+      url: medal2,
       date: '2024.3.30',
       score: 500
     },
     {
-      url: '/src/images/xiyang098/f07bec031843797f8179d410895d74b3.png', 
+      url: medal3, 
       date: '2024.4.15',
       score: 1000
     },
     {
-      url: '/src/images/xiyang098/d2aae0de609478ffef63d38b76eaeee6.png', 
+      url: medal4, 
       date: '2024.5.3',
       score: 5000
     },
     {
-      url: '/src/images/xiyang098/3133f5cd54c6626dce43099a0ece7ea2.png', 
+      url: medal5, 
       date: '2024.5.25',
       score: 10000
     }
   ]
-    
 });
 
 const router = useRouter();
@@ -39,37 +48,32 @@ const goBack = () => {
   router.back();  
 }; 
 
-
 const email = ref(localStorage.getItem('userEmail') || '');  
 const myInfo = ref({})
 
 onMounted(async () => {
   try {
-    // console.log(111);
-    const response = await axios.get(`https://10.122.210.57:8000/main/get-by-email/${email.value}/`)  // 发送GET请求到Django视图  
+    const response = await axios.get(`https://garbage.sa1ge.ink/main/get-by-email/${email.value}/`)  // 发送GET请求到Django视图  
     myInfo.value = response.data  // 将返回的用户信息存储在响应式引用中 
-
   } catch (error) {
     console.error('Error fetching user info:', error)
   }
 })
-
-
 </script>
 
 <template>
 <div class="flex-col page">
   <div class="flex-col flex-1 group">
     <div class="flex-row items-center group_2">
-      <img class="image" @click="goBack" src="../../images/xiyang098/a0826ba5fc994a76749cd5cb2d23b553.png" />
+      <img class="image" @click="goBack" :src="backIcon" />
       <span class="text ml-126">成就勋章</span>
     </div>
     <div class="flex-col group_3">
       <div class="flex-col group_4">
         <div class="flex-col justify-start items-center self-stretch relative group_5">
           <span class="text_2">环保卫士</span>
-          <img class="image_2 pos" src="../../images/xiyang098/21c156ae6b1a260a46a962dcbc812923.png" />
-          <img class="image_3 pos_2" src="../../images/xiyang098/a2905898fecb1d55de08e853b81b4bb2.png" />
+          <img class="image_2 pos" :src="flashIcon1" />
+          <img class="image_3 pos_2" :src="flashIcon2" />
         </div>
         <div class="mt-4 self-center group_6">
           <span class="font text_3">累计</span>
@@ -104,22 +108,12 @@ onMounted(async () => {
 .mt-25 {
   margin-top: 6.361vw;
 }
-.ml-33 {
-  margin-left: 8.397vw;
-}
 .page {
   background-color: #ffffff;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   height: 100%;
-}
-.header {
-  background-image: url('../../images/xiyang098/5f75d39751dd7fc3326ebb162726d3fa.png');
-  background-position: 0% 0%;
-  background-size: 100%, 100%;
-  background-repeat: no-repeat;
-  height: 11.705vw;
 }
 .group {
   overflow-y: auto;
@@ -153,13 +147,10 @@ onMounted(async () => {
   font-family: STLiti;
   line-height: 4.453vw;
 }
-
-/* 两张 flash 图片 */
 .image_2 {
   mix-blend-mode: SCREEN;
   width: 31.807vw;
   height: 8.397vw;
-
   animation: moveRight 1s ease-out;
 }
 .pos {
@@ -172,7 +163,6 @@ onMounted(async () => {
   mix-blend-mode: SCREEN;
   width: 37.405vw;
   height: 8.397vw;
-
   animation: moveLeft 1s ease-out;
 }
 .pos_2 {
@@ -180,29 +170,22 @@ onMounted(async () => {
   right: 30.534vw;
   bottom: 0;
 }
-
 @keyframes moveRight {
   from {
     transform: translateX(calc(-50% - 20vw));
   }
-
   to {
     transform: translateX(-50%);
   }
 }
-
 @keyframes moveLeft {
   from {
     transform: translateX(20vw);
   }
-
   to {
     transform: translateX(0);
   }
 }
-
-
-
 .group_6 {
   line-height: 2.972vw;
 }
@@ -226,12 +209,16 @@ onMounted(async () => {
 .image_4 {
   width: 20.611vw;
   height: 20.611vw;
+  border-radius: 50%; /* 确保图片是圆形的 */
 }
 .section {
   margin-right: 3.562vw;
   padding: 2.545vw 3.053vw 5.089vw 5.089vw;
   background-color: #f8faf9;
   height: 20.611vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 使内容在垂直方向上均匀分布 */
 }
 .font_2 {
   font-size: 3.053vw;
@@ -248,24 +235,4 @@ onMounted(async () => {
 .text_5 {
   line-height: 6.687vw;
 }
-.group_12 {
-  padding: 0 1.018vw;
-}
-.image_5 {
-  width: 18.575vw;
-  height: 21.374vw;
-}
-.section_4 {
-  margin-right: 2.29vw;
-  margin-bottom: 0.763vw;
-  background-color: #f8faf9;
-  height: 20.611vw;
-}
-
-.medal {
-  margin-bottom: 10vw;
-}
-
-
-
 </style>

@@ -3,6 +3,23 @@ import { useRouter } from 'vue-router';
 import { ref, reactive, onMounted } from 'vue';
 import { fetchMessage, fetchImage } from '@/api/api';
 
+// 引入图像文件，路径基于 `src` 目录
+import backIcon from '@/images/xiyang098/comment.png';
+import rankIcon from '@/images/xiyang098/c4a82e7741cff9968951711613c80af7.png';
+import achievementIcon1 from '@/images/xiyang098/8d5e91c4305a1449b74d60ba378706e3.png';
+import achievementIcon2 from '@/images/xiyang098/a3f43526e03d14366fdae5faf01908c9.png';
+import achievementIcon3 from '@/images/xiyang098/ec2420b26c4e12f55bdf4c4ce5e83d41.png';
+import achievementIcon4 from '@/images/xiyang098/2a0bbe7bbb668ca0c6d21f52930b04e1.png';
+import achievementIcon5 from '@/images/xiyang098/f6a332e7aa88223f407fe7c906001fd4.png';
+import achievementIcon6 from '@/images/xiyang098/c8b211476cf0b5fc2ec0009289363a22.png';
+import achievementIcon7 from '@/images/xiyang098/bf80d11a15fd0d4799f78f167866b6be.png';
+import achievementGrid1 from '@/images/xiyang098/96b01197c75773f6887c459149ea6e4b.png';
+import achievementGrid2 from '@/images/xiyang098/cc6a0475f9369ed4cf8407b75672d1f9.png';
+import achievementGrid3 from '@/images/xiyang098/f07bec031843797f8179d410895d74b3.png';
+import achievementGrid4 from '@/images/xiyang098/d2aae0de609478ffef63d38b76eaeee6.png';
+import listIcon from '@/images/xiyang098/e681f7d42adbf16897251c2c7c24a5c2.png';
+import tabBarBg from '@/images/xiyang098/4929bbe2a8eb6089d4bacf58dbbaada5.png';
+
 const props = defineProps({});
 
 const data = reactive({
@@ -11,10 +28,10 @@ const data = reactive({
 
 const router = useRouter();
 
-const email = ref(localStorage.getItem('userEmail') || '')
-const name = ref('')
-const avatar_url = ref('')
-const avatar = ref('')
+const email = ref(localStorage.getItem('userEmail') || '');
+const name = ref('');
+const avatar_url = ref('');
+const avatar = ref('');
 
 async function fetchUserMessage() {
   try {
@@ -57,7 +74,6 @@ onMounted(async () => {
 
 <template>
   <div class="flex-col page">
-
     <div class="flex-col">
       <div class="flex-col flex-1 group">
         <div class="flex-row justify-between items-center group_2">
@@ -69,7 +85,7 @@ onMounted(async () => {
             </div>
           </div>
           <div class="flex-col group_3" @click="toComment">
-            <img class="self-center image_2" src="../../images/xiyang098/comment.png" />
+            <img class="self-center image_2" :src="backIcon" />
             <span class="text_3">论坛</span>
           </div>
         </div>
@@ -78,43 +94,39 @@ onMounted(async () => {
             <div class="flex-col shrink-0 relative section" @click="toRank">
               <div class="flex-col justify-start items-center relative group_4">
                 <span class="font_2 text_4">rank</span>
-                <img class="image_4 pos_2" src="../../images/xiyang098/c4a82e7741cff9968951711613c80af7.png" />
+                <img class="image_4 pos_2" :src="rankIcon" />
               </div>
               <div class="flex-col mt-5">
                 <div class="flex-row group_6">
-                  <img class="image_5" src="../../images/xiyang098/8d5e91c4305a1449b74d60ba378706e3.png" />
-                  <img class="image_6 ml-13" src="../../images/xiyang098/a3f43526e03d14366fdae5faf01908c9.png" />
+                  <img class="image_5" :src="achievementIcon1" />
+                  <img class="image_6 ml-13" :src="achievementIcon2" />
                 </div>
                 <div class="flex-row items-start group_6 view">
-                  <img class="image_7" src="../../images/xiyang098/ec2420b26c4e12f55bdf4c4ce5e83d41.png" />
-                  <img class="ml-12 image_6 image_8"
-                    src="../../images/xiyang098/2a0bbe7bbb668ca0c6d21f52930b04e1.png" />
+                  <img class="image_7" :src="achievementIcon3" />
+                  <img class="ml-12 image_6 image_8" :src="achievementIcon4" />
                 </div>
                 <div class="flex-row items-end group_6 view_2">
-                  <img class="image_9" src="../../images/xiyang098/f6a332e7aa88223f407fe7c906001fd4.png" />
-                  <img class="image_6 ml-13" src="../../images/xiyang098/c8b211476cf0b5fc2ec0009289363a22.png" />
+                  <img class="image_9" :src="achievementIcon5" />
+                  <img class="image_6 ml-13" :src="achievementIcon6" />
                 </div>
               </div>
             </div>
             <div class="ml-20 flex-col flex-1 section_2" @click="toAchivement">
               <div class="flex-col justify-start items-center relative group_5">
                 <span class="font_2 text_4 text_5">achievement</span>
-                <img class="image_3 pos" src="../../images/xiyang098/bf80d11a15fd0d4799f78f167866b6be.png" />
+                <img class="image_3 pos" :src="achievementIcon7" />
               </div>
               <div class="grid mt-17">
-                <img class="grid-item" src="../../images/xiyang098/96b01197c75773f6887c459149ea6e4b.png" />
-                <img class="grid-item" src="../../images/xiyang098/cc6a0475f9369ed4cf8407b75672d1f9.png" />
-                <img class="grid-item" src="../../images/xiyang098/f07bec031843797f8179d410895d74b3.png" />
-                <img class="grid-item" src="../../images/xiyang098/d2aae0de609478ffef63d38b76eaeee6.png" />
+                <img class="grid-item" :src="achievementGrid1" />
+                <img class="grid-item" :src="achievementGrid2" />
+                <img class="grid-item" :src="achievementGrid3" />
+                <img class="grid-item" :src="achievementGrid4" />
               </div>
             </div>
           </div>
-
-
-
           <div class="mt-20 flex-col list">
             <div class="flex-row items-center mt-20 list-item" v-for="(item, index) in data.items" :key="index">
-              <img class="shrink-0 image_10" src="../../images/xiyang098/e681f7d42adbf16897251c2c7c24a5c2.png" />
+              <img class="shrink-0 image_10" :src="listIcon" />
               <div class="flex-col flex-1 ml-11">
                 <span class="font">可回收垃圾处理注意事项</span>
                 <div class="flex-row items-baseline group_7 mt-11">
@@ -125,9 +137,6 @@ onMounted(async () => {
               </div>
             </div>
           </div>
-
-
-
         </div>
       </div>
       <!-- 底部导航栏 -->
@@ -175,7 +184,7 @@ onMounted(async () => {
 }
 
 .header {
-  background-image: url('../../images/xiyang098/5f75d39751dd7fc3326ebb162726d3fa.png');
+  background-image: url('@/images/xiyang098/5f75d39751dd7fc3326ebb162726d3fa.png');
   background-position: 0% 0%;
   background-size: 100%, 100%;
   background-repeat: no-repeat;
@@ -415,7 +424,7 @@ onMounted(async () => {
 .tab-bar {
   padding: 4.071vw 0 4.58vw;
   overflow: hidden;
-  background-image: url('../../images/xiyang098/4929bbe2a8eb6089d4bacf58dbbaada5.png');
+  background-image: url('@/images/xiyang098/4929bbe2a8eb6089d4bacf58dbbaada5.png');
   background-size: 100% 100%;
 }
 
